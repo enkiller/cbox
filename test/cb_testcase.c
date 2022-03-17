@@ -6,6 +6,8 @@
  * 2022-03-16     tyx          first implementation
  */
 
+#include <string.h>
+
 struct cb_test_cmd_tab
 {
     const char *tc;
@@ -34,7 +36,7 @@ int cb_testcase(int argc, char *argv[])
         {
             for (j = 1; j < argc; j++)
             {
-                if (rt_strcmp(_table[i].tc, argv[j]) == 0)
+                if (strcmp(_table[i].tc, argv[j]) == 0)
                 {
                     _table[i].tc_func();
                 }
