@@ -54,13 +54,12 @@ cb_linkedhashmap_item_t *cb_linkedhashmap_remove(cb_linkedhashmap_t *object, con
 
 void cb_linkedhashmap_item_remove(cb_linkedhashmap_item_t *item)
 {
-    cb_hashmap_item_remove(item);
+    cb_hashmap_item_remove(&item->parent);
     cb_list_remove(&item->n);
 }
 
 void cb_linkedhashmap_remove_all(cb_linkedhashmap_t *object, void (*free_item)(cb_linkedhashmap_t *, cb_linkedhashmap_item_t *))
 {
-    cb_linkedhashmap_iter_t iter = CB_LINKEDHASHMAP_ITER_INIT(object);
     cb_linkedhashmap_item_t *item;
 
     while ((item = cb_linkedhashmap_pop(object)) != cb_null)

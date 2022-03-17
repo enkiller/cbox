@@ -59,7 +59,7 @@ cb_hashmap_item_t *cb_hashmap_replace(cb_hashmap_t *object, cb_hashmap_item_t *e
 cb_hashmap_item_t *cb_hashmap_get(cb_hashmap_t *object, const void *key);
 cb_hashmap_item_t *cb_hashmap_remove(cb_hashmap_t *object, const void *key);
 void cb_hashmap_item_remove(cb_hashmap_item_t *item);
-void cb_hashmap_remove_all(cb_hashmap_t *object, void (*free_item)(cb_hashmap_item_t *));
+void cb_hashmap_remove_all(cb_hashmap_t *object, void (*free_item)(cb_hashmap_t *, cb_hashmap_item_t *));
 cb_hashmap_item_t *cb_hashmap_iterator(cb_hashmap_t *object, cb_hashmap_iter_t *ctx);
 // item
 cb_hashmap_item_t *cb_hashmap_item_init(cb_hashmap_item_t *item, const void *key);
