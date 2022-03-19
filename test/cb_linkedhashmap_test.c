@@ -52,21 +52,6 @@ static const struct cb_hashmap_ops _ops =
     cb_hash_string_cmp,
 };
 
-cb_linkedhashmap_t *cb_linkedhashmap_init(cb_linkedhashmap_t *object, struct cb_hashmap_table *table,
-    cb_size_t table_size, const struct cb_hashmap_ops *ops);
-void cb_linkedhashmap_remove_all(cb_linkedhashmap_t *object,
-    void (*free_item)(cb_linkedhashmap_t *, cb_linkedhashmap_item_t *));
-void cb_linkedhashmap_push(cb_linkedhashmap_t *object, cb_linkedhashmap_item_t *item);
-cb_linkedhashmap_item_t *cb_linkedhashmap_pop(cb_linkedhashmap_t *obj);
-cb_linkedhashmap_item_t *cb_linkedhashmap_peak(cb_linkedhashmap_t *obj);
-cb_linkedhashmap_item_t *cb_linkedhashmap_top(cb_linkedhashmap_t *obj, const void *key);
-cb_size_t cb_linkedhashmap_size(cb_linkedhashmap_t *object);
-cb_linkedhashmap_iter_t *cb_linkedhashmap_iterator_init(cb_linkedhashmap_t *object, cb_linkedhashmap_iter_t *ctx);
-cb_linkedhashmap_item_t *cb_linkedhashmap_iterator(cb_linkedhashmap_t *object, cb_linkedhashmap_iter_t *ctx);
-// item
-cb_linkedhashmap_item_t *cb_linkedhashmap_item_init(cb_linkedhashmap_item_t *item, const void *key);
-const void *cb_linkedhashmap_item_key(cb_linkedhashmap_item_t *item);
-
 void cb_linkedhashmap_test01(void)
 {
     cb_linkedhashmap_t *linkedhashmap, _linkedhashmap;

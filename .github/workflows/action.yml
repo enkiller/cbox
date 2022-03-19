@@ -1,0 +1,37 @@
+name: Build
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    if: startsWith(github.event.head_commit.message, '[SKIP]') == false
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@master
+        with:
+          python-version: 3.8
+
+      - name: Install Tools
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get -qq install lcov gcovr
+          gcc --version
+      - name: Compile
+        if: ${{ success() }}
+        shell: bash
+        run: |
+          make debug
+      - run: ./cbox-test
+      - name: Repo covered
+        run: bash <(curl -s https://codecov.io/bash) -t ${{ secrets.CODECOV_TOKEN }}

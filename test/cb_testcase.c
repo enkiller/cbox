@@ -24,24 +24,11 @@ static const struct cb_test_cmd_tab _table[] = {
 
 int cb_testcase(int argc, char *argv[])
 {
-    int i, j;
+    int i;
 
     for (i = 0; i < sizeof(_table) / sizeof(_table[0]); i++)
     {
-        if (argc <= 1)
-        {
-            _table[i].tc_func();
-        }
-        else
-        {
-            for (j = 1; j < argc; j++)
-            {
-                if (strcmp(_table[i].tc, argv[j]) == 0)
-                {
-                    _table[i].tc_func();
-                }
-            }
-        }
+        _table[i].tc_func();
     }
     return 0;
 }
