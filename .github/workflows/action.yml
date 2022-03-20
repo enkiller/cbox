@@ -16,22 +16,22 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Python
-        uses: actions/setup-python@master
-        with:
-          python-version: 3.8
-
-      - name: Install Tools
-        shell: bash
+      - name: Install gtest
         run: |
-          sudo apt-get update
-          sudo apt-get -qq install lcov gcovr
-          gcc --version
+          mkdir build && cd build
+          git clone -b release-1.11.0 --depth=1 https://github.com/google/googletest.git googletest
+          cd googletest && mkdir gtest_build && cd gtest_build
+          sudo cmake .. && sudo make
+          sudo make install
       - name: Compile
         if: ${{ success() }}
         shell: bash
         run: |
-          make debug
-      - run: ./cbox-test
+          gcc --version
+          cd build
+          cmake -DASAN=ON -DCOVERAGE=ON -DSTRICT_ERROR=ON ..
+          make
+      - name: Run Testcase
+        run: ./build/bin/Cbox-test
       - name: Repo covered
         run: bash <(curl -s https://codecov.io/bash) -t ${{ secrets.CODECOV_TOKEN }}

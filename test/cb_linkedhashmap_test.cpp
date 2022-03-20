@@ -10,6 +10,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <gtest/gtest.h>
 #include "cb_linkedhashmap.h"
 #include "cb_hashfun.h"
 
@@ -41,18 +42,13 @@ static void cb_hashmap_test_data_init(struct cb_linkedhashmap_test_data *data_ar
     CB_HASHMAP_TEST_DATA_INIT(9);
 }
 
-#define CB_TEST(__v)    \
-    do {    \
-        printf("%s F:%s L:%d\n", (__v) ? "PASS" : "FAIL", __FUNCTION__, __LINE__);  \
-    } while(0)  \
-
 static const struct cb_hashmap_ops _ops = 
 {
     cb_hash_string,
     cb_hash_string_cmp,
 };
 
-void cb_linkedhashmap_test01(void)
+TEST(testCase, cb_linkedhashmap_test01)
 {
     cb_linkedhashmap_t *linkedhashmap, _linkedhashmap;
     struct cb_hashmap_table table[1];
@@ -61,25 +57,25 @@ void cb_linkedhashmap_test01(void)
     cb_hashmap_test_data_init(data, CB_ARRAY_SIZE(data));
     linkedhashmap = cb_linkedhashmap_init(&_linkedhashmap, table, CB_ARRAY_SIZE(table), &_ops);
     cb_linkedhashmap_push(linkedhashmap, &data[0].item);
-    CB_TEST(cb_linkedhashmap_pop(linkedhashmap) == &data[0].item);
-    CB_TEST(cb_linkedhashmap_pop(linkedhashmap) == cb_null);
+    EXPECT_EQ(cb_linkedhashmap_pop(linkedhashmap), &data[0].item);
+    EXPECT_EQ(cb_linkedhashmap_pop(linkedhashmap), cb_null);
 
     cb_linkedhashmap_push(linkedhashmap, &data[0].item);
-    CB_TEST(cb_linkedhashmap_size(linkedhashmap) == 1);
+    EXPECT_EQ(cb_linkedhashmap_size(linkedhashmap), 1);
     cb_linkedhashmap_push(linkedhashmap, &data[0].item);
     cb_linkedhashmap_push(linkedhashmap, &data[0].item);
-    CB_TEST(cb_linkedhashmap_size(linkedhashmap) == 1);
+    EXPECT_EQ(cb_linkedhashmap_size(linkedhashmap), 1);
 
-    CB_TEST(cb_linkedhashmap_peak(linkedhashmap) == &data[0].item);
-    CB_TEST(cb_linkedhashmap_pop(linkedhashmap) == &data[0].item);
-    CB_TEST(cb_linkedhashmap_peak(linkedhashmap) == cb_null);
-    CB_TEST(cb_linkedhashmap_pop(linkedhashmap) == cb_null);
-    CB_TEST(cb_linkedhashmap_size(linkedhashmap) == 0);
+    EXPECT_EQ(cb_linkedhashmap_peak(linkedhashmap), &data[0].item);
+    EXPECT_EQ(cb_linkedhashmap_pop(linkedhashmap), &data[0].item);
+    EXPECT_EQ(cb_linkedhashmap_peak(linkedhashmap), cb_null);
+    EXPECT_EQ(cb_linkedhashmap_pop(linkedhashmap), cb_null);
+    EXPECT_EQ(cb_linkedhashmap_size(linkedhashmap), 0);
 
     cb_linkedhashmap_remove_all(linkedhashmap, cb_null);
 }
 
-void cb_linkedhashmap_test02(void)
+TEST(testCase, cb_linkedhashmap_test02)
 {
     cb_linkedhashmap_t *linkedhashmap, _linkedhashmap;
     struct cb_hashmap_table table[2];
@@ -89,22 +85,22 @@ void cb_linkedhashmap_test02(void)
     linkedhashmap = cb_linkedhashmap_init(&_linkedhashmap, table, CB_ARRAY_SIZE(table), &_ops);
 
     cb_linkedhashmap_push(linkedhashmap, &data[0].item);
-    CB_TEST(cb_linkedhashmap_peak(linkedhashmap) == &data[0].item);
+    EXPECT_EQ(cb_linkedhashmap_peak(linkedhashmap), &data[0].item);
     cb_linkedhashmap_push(linkedhashmap, &data[1].item);
-    CB_TEST(cb_linkedhashmap_size(linkedhashmap) == 2);
-    CB_TEST(cb_linkedhashmap_peak(linkedhashmap) == &data[0].item);
-    CB_TEST(cb_linkedhashmap_top(linkedhashmap, data[1].key) == &data[1].item);
-    CB_TEST(cb_linkedhashmap_peak(linkedhashmap) == &data[1].item);
-    CB_TEST(cb_linkedhashmap_top(linkedhashmap, data[1].key) == &data[1].item);
-    CB_TEST(cb_linkedhashmap_peak(linkedhashmap) == &data[1].item);
-    CB_TEST(cb_linkedhashmap_top(linkedhashmap, data[0].key) == &data[0].item);
-    CB_TEST(cb_linkedhashmap_peak(linkedhashmap) == &data[0].item);
-    CB_TEST(cb_linkedhashmap_size(linkedhashmap) == 2);
+    EXPECT_EQ(cb_linkedhashmap_size(linkedhashmap), 2);
+    EXPECT_EQ(cb_linkedhashmap_peak(linkedhashmap), &data[0].item);
+    EXPECT_EQ(cb_linkedhashmap_top(linkedhashmap, data[1].key), &data[1].item);
+    EXPECT_EQ(cb_linkedhashmap_peak(linkedhashmap), &data[1].item);
+    EXPECT_EQ(cb_linkedhashmap_top(linkedhashmap, data[1].key), &data[1].item);
+    EXPECT_EQ(cb_linkedhashmap_peak(linkedhashmap), &data[1].item);
+    EXPECT_EQ(cb_linkedhashmap_top(linkedhashmap, data[0].key), &data[0].item);
+    EXPECT_EQ(cb_linkedhashmap_peak(linkedhashmap), &data[0].item);
+    EXPECT_EQ(cb_linkedhashmap_size(linkedhashmap), 2);
 
     cb_linkedhashmap_remove_all(linkedhashmap, cb_null);
 }
 
-void cb_linkedhashmap_test03(void)
+TEST(testCase, cb_linkedhashmap_test03)
 {
     cb_linkedhashmap_t *linkedhashmap, _linkedhashmap;
     struct cb_hashmap_table table[2];
@@ -122,17 +118,9 @@ void cb_linkedhashmap_test03(void)
     while ((item = cb_linkedhashmap_iterator(linkedhashmap, &iter)) != cb_null)
     {
         cb_linkedhashmap_item_remove(item);
-        printf("iter:%s\n", (char *)cb_linkedhashmap_item_key(item));
         memset(item, 0, sizeof(*item));
     }
-    CB_TEST(cb_linkedhashmap_size(linkedhashmap) == 0);
+    EXPECT_EQ(cb_linkedhashmap_size(linkedhashmap), 0);
 
     cb_linkedhashmap_remove_all(linkedhashmap, cb_null);
-}
-
-void cb_linkedhashmap_test(void)
-{
-    cb_linkedhashmap_test01();
-    cb_linkedhashmap_test02();
-    cb_linkedhashmap_test03();
 }

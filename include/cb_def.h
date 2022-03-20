@@ -34,7 +34,7 @@ typedef unsigned long               cb_size_t;
 
 // null
 #ifdef __cplusplus
-#   define cb_null                  (0)
+#   define cb_null                  (nullptr)
 #else
 #   define cb_null                  ((void *)0)
 #endif
