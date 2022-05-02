@@ -6,6 +6,13 @@
  * 2022-03-16     tyx          first implementation
  */
 
+#ifndef __CB_DEF_H__
+#define __CB_DEF_H__
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // version information
 #define CB_MAINVERSION                  1L              /**< major version number */
 #define CB_SUBVERSION                   0L              /**< minor version number */
@@ -34,17 +41,16 @@ typedef unsigned long               cb_size_t;
 
 // null
 #ifdef __cplusplus
-#   define cb_null                  (nullptr)
+#   define cb_null                  (0)
 #else
 #   define cb_null                  ((void *)0)
 #endif
 
 // compiler
-#if defined(__CC_ARM) || defined(__CLANG_ARM)           /* ARM Compiler */
+#if defined(__ARMCC_VERSION)           /* ARM Compiler */
     #define cb_inline                   static __inline
 #elif defined (__IAR_SYSTEMS_ICC__)                     /* for IAR Compiler */
     #define cb_inline                   static inline
-
 #elif defined (__GNUC__)                                /* GNU GCC Compiler */
     #define cb_inline                   static __inline
 #elif defined (__ADSPBLACKFIN__)                        /* for VisualDSP++ Compiler */
@@ -61,3 +67,9 @@ typedef unsigned long               cb_size_t;
 
 // define
 #define CB_ARRAY_SIZE(_array)   (sizeof(_array) / sizeof(_array[0]))
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __CB_DEF_H__ */

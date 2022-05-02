@@ -22,14 +22,7 @@ struct cb_hashmap_item
 };
 typedef struct cb_hashmap_item cb_hashmap_item_t;
 
-struct cb_hashmap_iterator
-{
-    cb_size_t index;
-    cb_hlist_t *node;
-};
-typedef struct cb_hashmap_iterator cb_hashmap_iter_t;
-
-#define CB_HASHMAP_ITER_INIT(_object) { 0, (_object)->table[0].hh.first }
+#define CB_HASHMAP_ITER_INIT(_object) { 0, (_object)->table[0].hh.first, _object }
 
 struct cb_hashmap_ops
 {
@@ -50,6 +43,14 @@ struct cb_hashmap
 };
 typedef struct cb_hashmap cb_hashmap_t;
 
+struct cb_hashmap_iterator
+{
+    cb_size_t index;
+    cb_hlist_t *node;
+    cb_hashmap_t *hashmap;
+};
+typedef struct cb_hashmap_iterator cb_hashmap_iter_t;
+
 // hashmap
 cb_hashmap_t *cb_hashmap_init(cb_hashmap_t *object, struct cb_hashmap_table *table,
     cb_size_t table_size, const struct cb_hashmap_ops *ops);
@@ -60,7 +61,7 @@ cb_hashmap_item_t *cb_hashmap_get(cb_hashmap_t *object, const void *key);
 cb_hashmap_item_t *cb_hashmap_remove(cb_hashmap_t *object, const void *key);
 void cb_hashmap_item_remove(cb_hashmap_item_t *item);
 void cb_hashmap_remove_all(cb_hashmap_t *object, void (*free_item)(cb_hashmap_t *, cb_hashmap_item_t *));
-cb_hashmap_item_t *cb_hashmap_iterator(cb_hashmap_t *object, cb_hashmap_iter_t *ctx);
+cb_hashmap_item_t *cb_hashmap_iterator(cb_hashmap_iter_t *ctx);
 // item
 cb_hashmap_item_t *cb_hashmap_item_init(cb_hashmap_item_t *item, const void *key);
 cb_hashmap_iter_t *cb_hashmap_iter_init(cb_hashmap_t *object, cb_hashmap_iter_t *iter);

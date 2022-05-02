@@ -115,7 +115,7 @@ void cb_hashmap_remove_all(cb_hashmap_t *object, void (*free_item)(cb_hashmap_t 
     cb_hashmap_iter_t iter = CB_HASHMAP_ITER_INIT(object);
     cb_hashmap_item_t *item;
 
-    while ((item = cb_hashmap_iterator(object, &iter)) != cb_null)
+    while ((item = cb_hashmap_iterator(&iter)) != cb_null)
     {
         cb_hashmap_item_remove(item);
         if (free_item != cb_null)
@@ -125,8 +125,10 @@ void cb_hashmap_remove_all(cb_hashmap_t *object, void (*free_item)(cb_hashmap_t 
     }
 }
 
-cb_hashmap_item_t *cb_hashmap_iterator(cb_hashmap_t *object, cb_hashmap_iter_t *ctx)
+cb_hashmap_item_t *cb_hashmap_iterator(cb_hashmap_iter_t *ctx)
 {
+    cb_hashmap_t *object = ctx->hashmap;
+
     if (ctx->index >= object->table_size)
         return cb_null;
 
@@ -170,6 +172,7 @@ cb_hashmap_iter_t *cb_hashmap_iter_init(cb_hashmap_t *object, cb_hashmap_iter_t 
     {
         iter->index = 0;
         iter->node = cb_hlist_first(&object->table[0].hh);
+        iter->hashmap = object;
     }
     return iter;
 }
