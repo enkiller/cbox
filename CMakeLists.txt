@@ -103,7 +103,7 @@ if (CI_BUILD)
 # Now simply link against gtest_main or gtest_main as needed. 
 TARGET_LINK_LIBRARIES(Cbox-test gtest pthread)
 else ()
-TARGET_LINK_LIBRARIES(Cbox-test gtest_main pthread)
+TARGET_LINK_LIBRARIES(Cbox-test gtest_main)
 endif ()
 
 enable_testing()

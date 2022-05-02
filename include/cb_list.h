@@ -23,7 +23,7 @@ struct cb_list_node
 typedef struct cb_list_node cb_list_t;                  /**< Type for lists. */
 
 #define cb_container_of(ptr, type, member) \
-    ((type *)((char *)(ptr) - (unsigned long)(&((type *)0)->member)))
+    ((type *)((char *)(ptr) - (char *)(&((type *)0)->member)))
 
 
 #define CB_LIST_OBJECT_INIT(object) { &(object), &(object) }
