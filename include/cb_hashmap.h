@@ -43,13 +43,13 @@ struct cb_hashmap
 };
 typedef struct cb_hashmap cb_hashmap_t;
 
-struct cb_hashmap_iterator
+struct cb_hashmap_iter
 {
     cb_size_t index;
     cb_hlist_t *node;
     cb_hashmap_t *hashmap;
 };
-typedef struct cb_hashmap_iterator cb_hashmap_iter_t;
+typedef struct cb_hashmap_iter cb_hashmap_iter_t;
 
 // hashmap
 cb_hashmap_t *cb_hashmap_init(cb_hashmap_t *object, struct cb_hashmap_table *table,

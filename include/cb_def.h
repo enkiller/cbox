@@ -40,11 +40,7 @@ typedef unsigned long               cb_size_t;
 #define cb_false                    ((cb_bool_t)0)
 
 // null
-#ifdef __cplusplus
-#   define cb_null                  (0)
-#else
-#   define cb_null                  ((void *)0)
-#endif
+#define cb_null                  (0)
 
 // compiler
 #if defined(__ARMCC_VERSION)           /* ARM Compiler */

@@ -62,8 +62,8 @@ TEST(testCase, cb_hashmap_test01)
     EXPECT_EQ(cb_hashmap_size(hashmap), 1);
     EXPECT_EQ(cb_hashmap_remove(hashmap, data[0].key), &data[0].item);
     EXPECT_EQ(cb_hashmap_size(hashmap), 0);
-    EXPECT_EQ(cb_hashmap_get(hashmap, data[0].key), cb_null);
-    cb_hashmap_remove_all(hashmap, cb_null);
+    EXPECT_EQ(cb_hashmap_get(hashmap, data[0].key), nullptr);
+    cb_hashmap_remove_all(hashmap, nullptr);
 }
 
 TEST(testCase, cb_hashmap_test02)
@@ -78,7 +78,7 @@ TEST(testCase, cb_hashmap_test02)
     cb_hashmap_put(hashmap, &data[0].item);
     EXPECT_EQ(cb_hashmap_replace(hashmap, &data[0].item), &data[0].item);
     EXPECT_EQ(cb_hashmap_size(hashmap), 1);
-    EXPECT_EQ(cb_hashmap_replace(hashmap, &data[1].item), cb_null);
+    EXPECT_EQ(cb_hashmap_replace(hashmap, &data[1].item), nullptr);
     EXPECT_EQ(cb_hashmap_size(hashmap), 2);
     EXPECT_EQ(cb_hashmap_replace(hashmap, &data[1].item), &data[1].item);
     EXPECT_EQ(cb_hashmap_size(hashmap), 2);
@@ -86,7 +86,7 @@ TEST(testCase, cb_hashmap_test02)
     EXPECT_EQ(cb_hashmap_size(hashmap), 2);
     EXPECT_EQ(cb_hashmap_get(hashmap, data[0].key), &data[0].item);
     EXPECT_EQ(cb_hashmap_get(hashmap, data[1].key), &data[1].item);
-    cb_hashmap_remove_all(hashmap, cb_null);
+    cb_hashmap_remove_all(hashmap, nullptr);
 }
 
 TEST(testCase, cb_hashmap_test03)
@@ -109,11 +109,11 @@ TEST(testCase, cb_hashmap_test03)
     EXPECT_EQ(cb_hashmap_size(hashmap), 3);
 
     cb_hashmap_iter_t iter = CB_HASHMAP_ITER_INIT(hashmap);
-    while ((item = cb_hashmap_iterator(hashmap, &iter)) != cb_null)
+    while ((item = cb_hashmap_iterator(&iter)) != nullptr)
     {
         cb_hashmap_remove(hashmap, item->key);
         memset(item, 0, sizeof(*item));
     }
     EXPECT_EQ(cb_hashmap_size(hashmap), 0);
-    cb_hashmap_remove_all(hashmap, cb_null);
+    cb_hashmap_remove_all(hashmap, nullptr);
 }

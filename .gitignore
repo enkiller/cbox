@@ -22,3 +22,4 @@
 *.gcda
 *.gcno
 cbox-test
+build

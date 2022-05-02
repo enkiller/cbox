@@ -58,7 +58,7 @@ TEST(testCase, cb_linkedhashmap_test01)
     linkedhashmap = cb_linkedhashmap_init(&_linkedhashmap, table, CB_ARRAY_SIZE(table), &_ops);
     cb_linkedhashmap_push(linkedhashmap, &data[0].item);
     EXPECT_EQ(cb_linkedhashmap_pop(linkedhashmap), &data[0].item);
-    EXPECT_EQ(cb_linkedhashmap_pop(linkedhashmap), cb_null);
+    EXPECT_EQ(cb_linkedhashmap_pop(linkedhashmap), nullptr);
 
     cb_linkedhashmap_push(linkedhashmap, &data[0].item);
     EXPECT_EQ(cb_linkedhashmap_size(linkedhashmap), 1);
@@ -68,11 +68,11 @@ TEST(testCase, cb_linkedhashmap_test01)
 
     EXPECT_EQ(cb_linkedhashmap_peak(linkedhashmap), &data[0].item);
     EXPECT_EQ(cb_linkedhashmap_pop(linkedhashmap), &data[0].item);
-    EXPECT_EQ(cb_linkedhashmap_peak(linkedhashmap), cb_null);
-    EXPECT_EQ(cb_linkedhashmap_pop(linkedhashmap), cb_null);
+    EXPECT_EQ(cb_linkedhashmap_peak(linkedhashmap), nullptr);
+    EXPECT_EQ(cb_linkedhashmap_pop(linkedhashmap), nullptr);
     EXPECT_EQ(cb_linkedhashmap_size(linkedhashmap), 0);
 
-    cb_linkedhashmap_remove_all(linkedhashmap, cb_null);
+    cb_linkedhashmap_remove_all(linkedhashmap, nullptr);
 }
 
 TEST(testCase, cb_linkedhashmap_test02)
@@ -97,7 +97,7 @@ TEST(testCase, cb_linkedhashmap_test02)
     EXPECT_EQ(cb_linkedhashmap_peak(linkedhashmap), &data[0].item);
     EXPECT_EQ(cb_linkedhashmap_size(linkedhashmap), 2);
 
-    cb_linkedhashmap_remove_all(linkedhashmap, cb_null);
+    cb_linkedhashmap_remove_all(linkedhashmap, nullptr);
 }
 
 TEST(testCase, cb_linkedhashmap_test03)
@@ -115,12 +115,12 @@ TEST(testCase, cb_linkedhashmap_test03)
     cb_linkedhashmap_push(linkedhashmap, &data[2].item);
 
     cb_linkedhashmap_iter_t iter = CB_LINKEDHASHMAP_ITER_INIT(linkedhashmap);
-    while ((item = cb_linkedhashmap_iterator(linkedhashmap, &iter)) != cb_null)
+    while ((item = cb_linkedhashmap_iterator(linkedhashmap, &iter)) != nullptr)
     {
         cb_linkedhashmap_item_remove(item);
         memset(item, 0, sizeof(*item));
     }
     EXPECT_EQ(cb_linkedhashmap_size(linkedhashmap), 0);
 
-    cb_linkedhashmap_remove_all(linkedhashmap, cb_null);
+    cb_linkedhashmap_remove_all(linkedhashmap, nullptr);
 }
