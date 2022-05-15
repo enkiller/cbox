@@ -86,19 +86,18 @@ void cb_linkedhashmap_push(cb_linkedhashmap_t *object, cb_linkedhashmap_item_t *
 
 cb_linkedhashmap_item_t *cb_linkedhashmap_first(cb_linkedhashmap_t *object, int removed)
 {
-    cb_linkedhashmap_item_t *item;
+    cb_linkedhashmap_item_t *item = cb_null;
 
-    if (cb_list_isempty(&object->head))
+    if (!cb_list_isempty(&object->head))
     {
-        return cb_null;
-    }
-    // get first
-    item = cb_list_first_entry(&object->head, cb_linkedhashmap_item_t, n);
-    // is remove
-    if (removed)
-    {
-        cb_list_remove(&item->n);
-        cb_hashmap_item_remove(&item->parent);
+        // get first
+        item = cb_list_first_entry(&object->head, cb_linkedhashmap_item_t, n);
+        // is remove
+        if (removed)
+        {
+            cb_list_remove(&item->n);
+            cb_hashmap_item_remove(&item->parent);
+        }
     }
     return item;
 }
@@ -141,16 +140,20 @@ cb_linkedhashmap_iter_t *cb_linkedhashmap_iterator_init(cb_linkedhashmap_t *obje
     if (ctx)
     {
         ctx->node = cb_list_first(&object->head);
+        ctx->object = object;
     }
     return ctx;
 }
 
-cb_linkedhashmap_item_t *cb_linkedhashmap_iterator(cb_linkedhashmap_t *object, cb_linkedhashmap_iter_t *ctx)
+cb_linkedhashmap_item_t *cb_linkedhashmap_iterator(cb_linkedhashmap_iter_t *ctx)
 {
-    for (cb_list_t *pos = ctx->node, *nn = pos->next; pos != &object->head; pos = nn, nn = pos->next)
+    cb_linkedhashmap_item_t *item = cb_null;
+    cb_linkedhashmap_t *object = ctx->object;
+
+    for (cb_list_t *pos = ctx->node, *nn = pos->next; pos != &object->head && item == cb_null; pos = nn, nn = pos->next)
     {
         ctx->node = nn;
-        return cb_list_entry(pos, cb_linkedhashmap_item_t, n);
+        item = cb_list_entry(pos, cb_linkedhashmap_item_t, n);
     }
-    return cb_null;
+    return item;
 }

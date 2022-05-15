@@ -117,3 +117,41 @@ TEST(testCase, cb_hashmap_test03)
     EXPECT_EQ(cb_hashmap_size(hashmap), 0);
     cb_hashmap_remove_all(hashmap, nullptr);
 }
+
+static void hashmap_free_item(cb_hashmap_t *object, cb_hashmap_item_t *item)
+{
+    (void)object;
+    memset(item, 0, sizeof(*item));
+}
+
+TEST(testCase, cb_hashmap_test04)
+{
+    cb_hashmap_t _hashmap, _hashmap1;
+    cb_hashmap_t *hashmap, *hashmap1;
+    struct cb_hashmap_table table[2], table1[4];
+    struct cb_hashmap_test_data data[3];
+    cb_hashmap_item_t *item;
+
+    cb_hashmap_test_data_init(data, CB_ARRAY_SIZE(data));
+    hashmap = cb_hashmap_init(&_hashmap, table, CB_ARRAY_SIZE(table), &_ops);
+    cb_hashmap_put(hashmap, &data[0].item);
+    EXPECT_EQ(cb_hashmap_size(hashmap), 1);
+    cb_hashmap_put(hashmap, &data[1].item);
+    EXPECT_EQ(cb_hashmap_size(hashmap), 2);
+    cb_hashmap_put(hashmap, &data[2].item);
+    EXPECT_EQ(cb_hashmap_size(hashmap), 3);
+
+    hashmap1 = cb_hashmap_init(&_hashmap1, table1, CB_ARRAY_SIZE(table1), &_ops);
+    cb_hashmap_iter_t iter, *iter_ptr;
+    iter_ptr = cb_hashmap_iter_init(hashmap, &iter);
+    while ((item = cb_hashmap_iterator(iter_ptr)) != nullptr)
+    {
+        cb_hashmap_remove(hashmap, item->key);
+        cb_hashmap_put(hashmap1, item);
+    }
+    EXPECT_EQ(cb_hashmap_size(hashmap), 0);
+    EXPECT_EQ(cb_hashmap_size(hashmap1), 3);
+    cb_hashmap_remove_all(hashmap, hashmap_free_item);
+    cb_hashmap_remove_all(hashmap1, hashmap_free_item);
+    EXPECT_EQ(cb_hashmap_size(hashmap1), 0);
+}

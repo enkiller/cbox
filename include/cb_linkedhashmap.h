@@ -32,10 +32,11 @@ typedef struct cb_linkedhashmap cb_linkedhashmap_t;
 struct cb_linkedhashmap_iterator
 {
     cb_list_t *node;
+    cb_linkedhashmap_t *object;
 };
 typedef struct cb_linkedhashmap_iterator cb_linkedhashmap_iter_t;
 
-#define CB_LINKEDHASHMAP_ITER_INIT(_object) { (_object)->head.next }
+#define CB_LINKEDHASHMAP_ITER_INIT(_object) { (_object)->head.next, _object }
 
 // linkedhashmap
 cb_linkedhashmap_t *cb_linkedhashmap_init(cb_linkedhashmap_t *object, struct cb_hashmap_table *table,
@@ -44,13 +45,14 @@ void cb_linkedhashmap_remove_all(cb_linkedhashmap_t *object,
     void (*free_item)(cb_linkedhashmap_t *, cb_linkedhashmap_item_t *));
 cb_linkedhashmap_item_t *cb_linkedhashmap_remove(cb_linkedhashmap_t *object, const void *key);
 void cb_linkedhashmap_item_remove(cb_linkedhashmap_item_t *item);
+cb_linkedhashmap_item_t *cb_linkedhashmap_get(cb_linkedhashmap_t *object, const void *key);
 void cb_linkedhashmap_push(cb_linkedhashmap_t *object, cb_linkedhashmap_item_t *item);
 cb_linkedhashmap_item_t *cb_linkedhashmap_pop(cb_linkedhashmap_t *obj);
 cb_linkedhashmap_item_t *cb_linkedhashmap_peak(cb_linkedhashmap_t *obj);
 cb_linkedhashmap_item_t *cb_linkedhashmap_top(cb_linkedhashmap_t *obj, const void *key);
 cb_size_t cb_linkedhashmap_size(cb_linkedhashmap_t *object);
 cb_linkedhashmap_iter_t *cb_linkedhashmap_iterator_init(cb_linkedhashmap_t *object, cb_linkedhashmap_iter_t *ctx);
-cb_linkedhashmap_item_t *cb_linkedhashmap_iterator(cb_linkedhashmap_t *object, cb_linkedhashmap_iter_t *ctx);
+cb_linkedhashmap_item_t *cb_linkedhashmap_iterator(cb_linkedhashmap_iter_t *ctx);
 // item
 cb_linkedhashmap_item_t *cb_linkedhashmap_item_init(cb_linkedhashmap_item_t *item, const void *key);
 const void *cb_linkedhashmap_item_key(cb_linkedhashmap_item_t *item);

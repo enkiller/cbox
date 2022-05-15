@@ -28,6 +28,11 @@ typedef struct cb_list_node cb_list_t;                  /**< Type for lists. */
 
 #define CB_LIST_OBJECT_INIT(object) { &(object), &(object) }
 
+/**
+ * @brief initialize a list object
+ *
+ * @param l the list to be initialized
+ */
 cb_inline void cb_list_init(cb_list_t *l)
 {
     l->next = l->prev = l;
@@ -119,7 +124,7 @@ cb_inline unsigned int cb_list_len(const cb_list_t *l)
 struct cb_hlist_node
 {
     struct cb_hlist_node *next;                         /**< point to next node. */
-    struct cb_hlist_node **pprev;                       /**< Point to the next node of the previous node*/
+    struct cb_hlist_node **pprev;                       /**< Point to the next node of the previous node */
 };
 typedef struct cb_hlist_node cb_hlist_t;
 
@@ -132,8 +137,8 @@ struct cb_hlist_head
 };
 typedef struct cb_hlist_head cb_hhead_t;
 
-#define CB_HASH_HEAD_OBJECT_INIT(object) { CB_NULL }
-#define CB_HASH_NODE_OBJECT_INIT(object) { CB_NULL, CB_NULL}
+#define CB_HASH_HEAD_OBJECT_INIT(object) { cb_null }
+#define CB_HASH_NODE_OBJECT_INIT(object) { cb_null, cb_null}
 
 /**
  * @brief initialize a hash head object

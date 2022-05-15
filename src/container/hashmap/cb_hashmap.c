@@ -18,7 +18,7 @@ cb_hashmap_item_t *cb_hashmap_pick(cb_hashmap_t *object,
     const void *key, cb_bool_t removed, cb_hhead_t **hh_ptr)
 {
     cb_hhead_t *hh;
-    cb_hashmap_item_t *item;
+    cb_hashmap_item_t *item = cb_null;
 
     /* get hash list head */
     hh = _tab_head_get(object, key);
@@ -27,21 +27,20 @@ cb_hashmap_item_t *cb_hashmap_pick(cb_hashmap_t *object,
         *hh_ptr = hh;
     }
     /* traversing the list and get item */
-    cb_hlist_for_each(i, hh)
+    for (cb_hlist_t *i = hh->first; i != cb_null && item == cb_null; i = i->next)
     {
-        item = cb_hlist_entry(i, cb_hashmap_item_t, n);
+        cb_hashmap_item_t *tmp = cb_hlist_entry(i, cb_hashmap_item_t, n);
         /* Whether the key values are equal */
-        if (object->ops->cmp(key, item->key))
+        if (object->ops->cmp(key, tmp->key))
         {
             if (removed)
             {
-                cb_hlist_remove(&item->n);
+                cb_hlist_remove(&tmp->n);
             }
-            return item;
+            item = tmp;
         }
     }
-    /* Key value not found */
-    return cb_null;
+    return item;
 }
 
 cb_hashmap_t *cb_hashmap_init(cb_hashmap_t *object, struct cb_hashmap_table *table,
@@ -128,32 +127,33 @@ void cb_hashmap_remove_all(cb_hashmap_t *object, void (*free_item)(cb_hashmap_t 
 cb_hashmap_item_t *cb_hashmap_iterator(cb_hashmap_iter_t *ctx)
 {
     cb_hashmap_t *object = ctx->hashmap;
+    cb_hashmap_item_t *item = cb_null;
 
-    if (ctx->index >= object->table_size)
-        return cb_null;
-
-    for (cb_size_t i = ctx->index; i < object->table_size; i++)
+    while (ctx->index < object->table_size && item == cb_null)
     {
-        for (cb_hlist_t *pos = ctx->node, *nn = pos ? pos->next : cb_null; pos != cb_null; \
-            pos = nn, nn = pos ? pos->next : cb_null)
+        cb_hlist_t *pos = ctx->node;
+        if (pos)
         {
             // save next node
-            if (nn == cb_null)
+            if (pos->next == cb_null)
             {
-                if (++i < object->table_size)
+                if (++ctx->index < object->table_size)
                 {
-                    ctx->node = cb_hlist_first(&object->table[i].hh);
+                    ctx->node = cb_hlist_first(&object->table[ctx->index].hh);
                 }
-                ctx->index = i;
             }
             else
             {
-                ctx->node = nn;
+                ctx->node = pos->next;
             }
-            return cb_hlist_entry(pos, cb_hashmap_item_t, n);
+            item = cb_hlist_entry(pos, cb_hashmap_item_t, n);
+        }
+        else if (++ctx->index < object->table_size)
+        {
+            ctx->node = cb_hlist_first(&object->table[ctx->index].hh);
         }
     }
-    return cb_null;
+    return item;
 }
 
 cb_hashmap_item_t *cb_hashmap_item_init(cb_hashmap_item_t *item, const void *key)
@@ -176,28 +176,3 @@ cb_hashmap_iter_t *cb_hashmap_iter_init(cb_hashmap_t *object, cb_hashmap_iter_t 
     }
     return iter;
 }
-
-//void hashmap_trace(hashmap_t map)
-//{
-//    rt_uint32_t i, len;
-//    rt_slist_t *l, *n;
-//    struct hashmap_item *item;
-//
-//    rt_kprintf("hashmap size:%d\n", hashmap_size(map));
-//    for (i = 0; i < map->tab_size; i++)
-//    {
-//        l = &map->tab[i].list;
-//        len = rt_slist_len(l);
-//        if (len == 0)
-//            continue;
-//        rt_kprintf("tab[%d] count : %d\n", i, len);
-//        rt_slist_for_each(n, l)
-//        {
-//            item = rt_slist_entry(n, struct hashmap_item, node);
-//            rt_kprintf("    hash:%08x k:%p addr:%p\n",
-//                map->ops->hash(item->key),
-//                item->key,
-//                item);
-//        }
-//    }
-//}

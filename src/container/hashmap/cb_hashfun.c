@@ -13,16 +13,24 @@ cb_uint32_t cb_hash_string(const void *k)
 {
     register cb_uint32_t hash = 0;
     const char *key = k;
+
     while (*key) hash = hash * 131 + *key++;
     return hash;
 }
 
 cb_bool_t cb_hash_string_cmp(const void *s1, const void *s2)
 {
-    if (s1 == s2)
-        return cb_true;
+    cb_bool_t r;
 
-    return cb_strcmp(s1, s2) == 0;
+    if (s1 == s2)
+    {
+        r = cb_true;
+    }
+    else
+    {
+        r = cb_strcmp(s1, s2) == 0;
+    }
+    return r;
 }
 
 cb_uint32_t cb_hash_uint32(const void *k)
@@ -39,8 +47,15 @@ cb_uint32_t cb_hash_uint32(const void *k)
 
 cb_bool_t cb_hash_uint32_cmp(const void *s1, const void *s2)
 {
-    if (s1 == s2)
-        return cb_true;
+    cb_bool_t r;
 
-    return (*(cb_uint32_t *)s1 == *(cb_uint32_t *)s2);
+    if (s1 == s2)
+    {
+        r = cb_true;
+    }
+    else
+    {
+        r = (*(cb_uint32_t *)s1 == *(cb_uint32_t *)s2);
+    }
+    return r;
 }
