@@ -28,4 +28,4 @@ jobs:
         run: ./build/bin/Cbox-test
       - name: Repo covered
         if: github.ref == 'refs/heads/master'
-        run: bash <(curl -s https://codecov.io/bash) -t ${{ secrets.CODECOV_TOKEN }}
+        uses: codecov/codecov-action@v3
