@@ -8,6 +8,8 @@ CPPPATH = [cwd + '/include']
 
 # add hashmap
 src = src + Glob('src/container/hashmap/*.c')
+# add queue
+src = src + Glob('src/container/queue/*.c')
 # add string
 src = src + Glob('src/libc/*.c')
 

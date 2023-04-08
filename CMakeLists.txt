@@ -94,7 +94,7 @@ endif ()
 include_directories(include)
 
 # add source file
-file(GLOB SOURCES ./src/container/hashmap/*.c ./src/libc/*c ./test/*cpp)
+file(GLOB SOURCES ./src/container/hashmap/*.c ./src/container/queue/*c ./src/libc/*c ./test/*cpp)
 
 # build
 add_executable (Cbox-test ${SOURCES})
