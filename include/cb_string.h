@@ -14,7 +14,7 @@ extern "C" {
 #endif
 
 long cb_strcmp(const char* s1, const char* s2);
-
+void* cb_memcpy(void* dst, const void* src, unsigned int count);
 
 #ifdef __cplusplus
 }

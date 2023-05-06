@@ -10,6 +10,8 @@ CPPPATH = [cwd + '/include']
 src = src + Glob('src/container/hashmap/*.c')
 # add queue
 src = src + Glob('src/container/queue/*.c')
+#add ringbuffer
+src = src + Glob('src/container/ringbuffer/*.c')
 # add string
 src = src + Glob('src/libc/*.c')
 
