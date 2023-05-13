@@ -7,7 +7,7 @@
  */
 
 #include "cb_hashfun.h"
-#include "cb_string.h"
+#include "cb_libc.h"
 
 cb_uint32_t cb_hash_string(const void *k)
 {

@@ -7,7 +7,7 @@
  */
 
 #include "cb_ringbuffer.h"
-#include "cb_string.h"
+#include "cb_libc.h"
 
 cb_inline unsigned int cb_ringbuffer_min(unsigned int a, unsigned int b)
 {
