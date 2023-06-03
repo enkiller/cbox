@@ -6,8 +6,8 @@
  * 2023-04-08     tyx          first implementation
  */
 
-#include "cb_queue.h"
 #include <gtest/gtest.h>
+#include "cb_queue.h"
 
 TEST(testCase, cb_queue_test01)
 {

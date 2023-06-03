@@ -6,8 +6,8 @@
  * 2022-05-14     tyx          first implementation
  */
 
-#include "cb_hashfun.h"
 #include <gtest/gtest.h>
+#include "cb_hashfun.h"
 
 TEST(testCase, cb_hashfun_test01)
 {

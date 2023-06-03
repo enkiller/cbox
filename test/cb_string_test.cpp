@@ -1,5 +1,5 @@
-#include <gtest/gtest.h>
 #include <string.h>
+#include <gtest/gtest.h>
 #include "cb_libc.h"
 
 TEST(testCase, cb_strcmp_test01)

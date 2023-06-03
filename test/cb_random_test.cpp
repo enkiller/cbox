@@ -6,12 +6,12 @@
  * 2023-05-13     tyx          first implementation
  */
 
-#include <gtest/gtest.h>
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>
+#include <time.h>
+#include <gtest/gtest.h>
 #include "cb_libc.h"
-#include "time.h"
 
 TEST(testCase, cb_random_test01)
 {

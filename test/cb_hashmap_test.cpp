@@ -8,11 +8,11 @@
  * 2020-05-18     tyx          first version.
  */
 
-#include "cb_hashmap.h"
-#include "cb_hashfun.h"
-#include <gtest/gtest.h>
 #include <stdio.h>
 #include <string.h>
+#include <gtest/gtest.h>
+#include "cb_hashmap.h"
+#include "cb_hashfun.h"
 
 struct cb_hashmap_test_data
 {

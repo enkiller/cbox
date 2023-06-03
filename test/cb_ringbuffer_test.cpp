@@ -1,5 +1,5 @@
-#include <gtest/gtest.h>
 #include <string.h>
+#include <gtest/gtest.h>
 #include "cb_ringbuffer.h"
 
 TEST(testCase, cb_ringbuffer_test01)

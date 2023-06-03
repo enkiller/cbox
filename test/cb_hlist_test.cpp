@@ -6,8 +6,8 @@
  * 2022-05-14     tyx          first implementation
  */
 
-#include "cb_list.h"
 #include <gtest/gtest.h>
+#include "cb_list.h"
 
 TEST(testCase, cb_hlist_test01)
 {
