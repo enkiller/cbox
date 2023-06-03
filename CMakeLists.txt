@@ -90,14 +90,15 @@ if (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang" OR ${CMAKE_CXX_COMPILER_ID} STREQU
   add_compile_options("-Wall" "-Wextra")
 endif ()
 
+# build target
+add_executable (Cbox-test)
+
 # add include path
 include_directories(include)
 
 # add source file
-file(GLOB SOURCES ./src/container/hashmap/*.c ./src/container/queue/*c ./src/container/ringbuffer/*c ./src/libc/*c ./test/*cpp)
-
-# build
-add_executable (Cbox-test ${SOURCES})
+add_subdirectory(src)
+add_subdirectory(test)
 
 if (CI_BUILD)
 # Now simply link against gtest_main or gtest_main as needed. 
