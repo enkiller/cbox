@@ -17,6 +17,8 @@ const cb_hsm_event_t cb_hsm_event_init = { CB_HSM_TOPIC_INIT };
 // The top level state, the root node of the state
 cb_hsm_ret_t cb_hsm_state_top(cb_hsm_actor_t* me, const cb_hsm_event_t* const e)
 {
+    (void)(me);
+    (void)(e);
     return CB_HSM_RET_IGNORED;
 }
 
@@ -239,6 +241,7 @@ cb_hsm_ret_t cb_hsm_super(cb_hsm_actor_t *me, cb_hsm_state_t state)
 
 cb_hsm_ret_t cb_hsm_handle(cb_hsm_actor_t* me)
 {
+    (void)(me);
     return CB_HSM_RET_HANDLED;
 }
 
