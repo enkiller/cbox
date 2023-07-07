@@ -8,27 +8,6 @@ struct cb_skiplist_test_node
     int value;
 };
 
-void cb_skiplist_test_dump(cb_skiplist_t *skl)
-{
-    int i;
-    for (i = CB_SKIPLIST_MAX_LEVEL - 1; i >= 0; i--)
-    {
-        cb_skiplist_for_each(item, skl)
-        {
-            if (cb_list_isempty(&item->row[i]))
-            {
-                printf("   ");
-            }
-            else
-            {
-                struct cb_skiplist_test_node* t = cb_container_of(item, struct cb_skiplist_test_node, parent);
-                printf("%3d", t->value);
-            }
-        }
-        printf("\n");
-    }
-}
-
 static int cb_skiplist_test_cmp(const cb_skiplist_node_t *v1, const cb_skiplist_node_t *v2)
 {
     struct cb_skiplist_test_node *t1 = cb_container_of(v1, struct cb_skiplist_test_node, parent);
@@ -52,7 +31,6 @@ TEST(testCase, cb_skiplist_test01)
         EXPECT_EQ(!!cb_skiplist_isempty(&skl), 0);
         EXPECT_EQ(cb_skiplist_first(&skl), &node_tab[0].parent);
     }
-    cb_skiplist_test_dump(&skl);
 }
 
 TEST(testCase, cb_skiplist_test02)
@@ -71,7 +49,6 @@ TEST(testCase, cb_skiplist_test02)
         EXPECT_EQ(!!cb_skiplist_isempty(&skl), 0);
         EXPECT_EQ(cb_skiplist_first(&skl), &node_tab[i].parent);
     }
-    cb_skiplist_test_dump(&skl);
 }
 
 TEST(testCase, cb_skiplist_test03)
@@ -94,7 +71,6 @@ TEST(testCase, cb_skiplist_test03)
             j += 1;
         }
     }
-    cb_skiplist_test_dump(&skl);
 }
 
 TEST(testCase, cb_skiplist_test04)
@@ -117,5 +93,4 @@ TEST(testCase, cb_skiplist_test04)
             j -= 1;
         }
     }
-    cb_skiplist_test_dump(&skl);
 }
