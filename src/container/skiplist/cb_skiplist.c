@@ -43,31 +43,25 @@ cb_skiplist_node_t* cb_skiplist_node_init(cb_skiplist_node_t* item)
 
 cb_skiplist_node_t *cb_skiplist_insert(cb_skiplist_t* skiplist, cb_skiplist_node_t* item)
 {
-    int lvl = CB_SKIPLIST_MAX_LEVEL - 1, i;
-    cb_list_t* tab[CB_SKIPLIST_MAX_LEVEL];
-    cb_skiplist_node_t*node;
+    cb_skiplist_iter iter;
+    cb_skiplist_node_t *node;
+    unsigned int height, i;
 
-    tab[lvl] = &skiplist->head.row[lvl];
-    while (lvl >= 0)
+    cb_skiplist_iter_begin(&iter, skiplist);
+    // Find a suitable insertion location from an ordered linked list
+    while ((node = cb_skiplist_iter_next(&iter)) != cb_null)
     {
-        for (; tab[lvl] != skiplist->head.row[lvl].prev; tab[lvl] = tab[lvl]->next)
+        if (skiplist->cmp(node, item) * skiplist->reverse > 0)
         {
-            node = cb_skiplist_of(tab[lvl]->next, lvl);
-            if (skiplist->cmp(node, item) * skiplist->reverse > 0)
-            {
-                break;
-            }
+            // Jump to the next level to continue searching
+            cb_skiplist_iter_skip(&iter);
         }
-        if (lvl > 0)
-        {
-            tab[lvl - 1] = tab[lvl] - 1;
-        }
-        lvl -= 1;
     }
-    lvl = cb_skiplist_height();
-    for (i = 0; i < lvl; i++)
+    // Insert
+    height = cb_skiplist_height();
+    for (i = 0; i < height; i++)
     {
-        cb_list_insert_after(tab[i], &item->row[i]);
+        cb_list_insert_after(iter.list[i], &item->row[i]);
     }
     return item;
 }
@@ -91,4 +85,27 @@ cb_skiplist_node_t* cb_skiplist_first(cb_skiplist_t* skiplist)
 int cb_skiplist_isempty(cb_skiplist_t* skiplist)
 {
     return cb_list_isempty(&skiplist->head.row[0]);
+}
+
+cb_skiplist_node_t *cb_skiplist_iter_next(cb_skiplist_iter *iter)
+{
+    int lvl = iter->level;
+    cb_skiplist_node_t *node = cb_null;
+
+    while (node == cb_null && lvl >= 0)
+    {
+        cb_list_t* last = iter->skiplist->head.row[lvl].prev;
+        cb_list_t ** list = iter->list;
+        list[lvl] = iter->next;
+        if (list[lvl] != last)
+        {
+            node = cb_skiplist_of(list[lvl]->next, lvl);
+            iter->next = list[lvl]->next;
+        }
+        else
+        {
+            lvl = cb_skiplist_iter_skip(iter);
+        }
+    }
+    return node;
 }

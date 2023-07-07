@@ -31,6 +31,38 @@ struct cb_skiplist
     int (*cmp)(const cb_skiplist_node_t* v1, const cb_skiplist_node_t* v2);
 };
 
+typedef struct cb_skiplist_iterator
+{
+    cb_skiplist_t *skiplist;
+    int level;
+    cb_list_t* list[CB_SKIPLIST_MAX_LEVEL];
+    cb_list_t* next;
+}cb_skiplist_iter;
+
+cb_inline int cb_skiplist_iter_skip(cb_skiplist_iter *iter)
+{
+    if (iter->level > 0)
+    {
+        iter->next = iter->list[iter->level] - 1;
+    }
+    if (iter->level >= 0)
+    {
+        iter->level -= 1;
+    }
+    return iter->level;
+}
+
+cb_inline cb_skiplist_iter *cb_skiplist_iter_begin(cb_skiplist_iter *iter, cb_skiplist_t* skiplist)
+{
+    iter->skiplist = skiplist;
+    iter->level = CB_SKIPLIST_MAX_LEVEL - 1;
+    //iter->list[iter->level] = &skiplist->head.row[iter->level];
+    iter->next = &skiplist->head.row[iter->level];
+    return iter;
+}
+
+cb_skiplist_node_t *cb_skiplist_iter_next(cb_skiplist_iter *iter);
+
 cb_skiplist_t *cb_skiplist_init(cb_skiplist_t *skiplist, int reverse,
     int (*cmp)(const cb_skiplist_node_t *v1, const cb_skiplist_node_t *v2));
 cb_skiplist_node_t *cb_skiplist_node_init(cb_skiplist_node_t *item);
