@@ -19,7 +19,7 @@ TEST(testCase, cb_skiplist_test01)
 {
     struct cb_skiplist_test_node node_tab[16];
     cb_skiplist_t skl;
-    int i;
+    unsigned int i;
 
     EXPECT_EQ(cb_skiplist_init(&skl, 0, cb_skiplist_test_cmp), &skl);
     EXPECT_EQ(!!cb_skiplist_isempty(&skl), 1);
@@ -37,7 +37,7 @@ TEST(testCase, cb_skiplist_test02)
 {
     struct cb_skiplist_test_node node_tab[16];
     cb_skiplist_t skl;
-    int i;
+    unsigned int i;
 
     EXPECT_EQ(cb_skiplist_init(&skl, 1, cb_skiplist_test_cmp), &skl);
     EXPECT_EQ(!!cb_skiplist_isempty(&skl), 1);
@@ -55,7 +55,7 @@ TEST(testCase, cb_skiplist_test03)
 {
     struct cb_skiplist_test_node node_tab[16];
     cb_skiplist_t skl;
-    int i, j;
+    unsigned int i, j;
 
     cb_skiplist_init(&skl, 0, cb_skiplist_test_cmp);
     for (i = 0; i < CB_ARRAY_SIZE(node_tab); i++)
@@ -77,7 +77,7 @@ TEST(testCase, cb_skiplist_test04)
 {
     struct cb_skiplist_test_node node_tab[16];
     cb_skiplist_t skl;
-    int i, j;
+    unsigned int i, j;
 
     cb_skiplist_init(&skl, 1, cb_skiplist_test_cmp);
     for (i = 0; i < CB_ARRAY_SIZE(node_tab); i++)
