@@ -13,7 +13,7 @@ unsigned int cb_skiplist_height(void)
 {
     unsigned int height = 1;
     // The probability of 1/4 increases by one level
-    while (height < CB_SKIPLIST_MAX_LEVEL && (cb_random() % 4) == 0)
+    while (height < CB_SKIPLIST_MAX_LEVEL && (cb_random() & 0xFFFF) < (0xFFFF >> 2))
     {
         height += 1;
     }
