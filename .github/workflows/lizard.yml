@@ -1,0 +1,14 @@
+on: push
+
+jobs:
+  check_complexity:
+    name: Check code complexity
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Install dependencies
+        run: pip install lizard
+      - name: Calculate code complexity
+        run: lizard -C 10 .\src\ .\include\
