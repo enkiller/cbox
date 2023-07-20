@@ -13,4 +13,4 @@ jobs:
       - name: Install dependencies
         run: pip install lizard
       - name: Calculate code complexity
-        run: lizard -C 10 .\src .\include
+        run: lizard -C 10 ./src ./include
