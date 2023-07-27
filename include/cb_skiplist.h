@@ -6,8 +6,8 @@
  * 2023-06-05     tyx          first implementation
  */
 
-#ifndef __CB_SKIPLIST_H__
-#define __CB_SKIPLIST_H__
+#ifndef CB_SKIPLIST_H_
+#define CB_SKIPLIST_H_
 
 #include "cb_list.h"
 

@@ -21,7 +21,7 @@ unsigned int cb_skiplist_height(void)
 }
 
 cb_skiplist_t* cb_skiplist_init(cb_skiplist_t* skiplist, int reverse,
-    cb_bool_t(*cmp)(const cb_skiplist_node_t* v1, const cb_skiplist_node_t* v2))
+    int (*cmp)(const cb_skiplist_node_t* v1, const cb_skiplist_node_t* v2))
 {
     cb_skiplist_node_init(&skiplist->head);
     skiplist->cmp = cmp;

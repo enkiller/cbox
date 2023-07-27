@@ -14,28 +14,32 @@ cb_uint32_t cb_hash_string(const void *k)
     register cb_uint32_t hash = 0;
     const char *key = k;
 
-    while (*key) hash = hash * 131 + *key++;
+    while (*key != '\0')
+    {
+        hash = hash * 131U;
+        hash += *key++;
+    }
     return hash;
 }
 
-cb_bool_t cb_hash_string_cmp(const void *s1, const void *s2)
+long cb_hash_string_cmp(const void *s1, const void *s2)
 {
-    cb_bool_t r;
+    long r;
 
     if (s1 == s2)
     {
-        r = cb_true;
+        r = 0;
     }
     else
     {
-        r = cb_strcmp(s1, s2) == 0;
+        r = cb_strcmp(s1, s2);
     }
     return r;
 }
 
 cb_uint32_t cb_hash_uint32(const void *k)
 {
-    register cb_uint32_t key = *(cb_uint32_t *)k;
+    register cb_uint32_t key = *(const cb_uint32_t *)k;
     key += ~(key << 15);
     key ^= (key >> 10);
     key += (key << 3);
@@ -45,17 +49,10 @@ cb_uint32_t cb_hash_uint32(const void *k)
     return key;
 }
 
-cb_bool_t cb_hash_uint32_cmp(const void *s1, const void *s2)
+long cb_hash_uint32_cmp(const void *s1, const void *s2)
 {
-    cb_bool_t r;
-
-    if (s1 == s2)
-    {
-        r = cb_true;
-    }
-    else
-    {
-        r = (*(cb_uint32_t *)s1 == *(cb_uint32_t *)s2);
-    }
+    cb_uint32_t v1 = *(const cb_uint32_t *)s1;
+    cb_uint32_t v2 = *(const cb_uint32_t *)s2;
+    long r = v1 - v2;
     return r;
 }

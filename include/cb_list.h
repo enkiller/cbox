@@ -6,8 +6,8 @@
  * 2022-03-16     tyx          first implementation
  */
 
-#ifndef __CB_LIST_H__
-#define __CB_LIST_H__
+#ifndef CB_LIST_H_
+#define CB_LIST_H_
 
 #include "cb_def.h"
 

@@ -6,8 +6,8 @@
  * 2023-05-13     tyx          first implementation
  */
 
-#ifndef __CB_LIBC_H__
-#define __CB_LIBC_H__
+#ifndef CB_LIBC_H_
+#define CB_LIBC_H_
 
 #ifdef __cplusplus
 extern "C" {

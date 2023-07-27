@@ -11,7 +11,17 @@
 
 cb_inline unsigned int cb_ringbuffer_min(unsigned int a, unsigned int b)
 {
-    return a > b ? b : a;
+    unsigned int m;
+
+    if (a > b)
+    {
+        m = b;
+    }
+    else
+    {
+        m = a;
+    }
+    return m;
 }
 
 cb_ringbuffer_t *cb_ringbuffer_init(cb_ringbuffer_t *rb, void *buff, unsigned int size)
@@ -35,7 +45,7 @@ unsigned int cb_ringbuffer_write(cb_ringbuffer_t *rb, const void *data, unsigned
     // write
     cb_memcpy((char *)rb->buff + rb->out_idx, data, right_len);
     freelen -= right_len;
-    cb_memcpy(rb->buff, (char *)data + right_len, freelen);
+    cb_memcpy(rb->buff, (const char *)data + right_len, freelen);
     rb->out_idx = (rb->out_idx + length) % rb->size;
     rb->out = rb->out + length;
     return length;
@@ -57,7 +67,7 @@ unsigned int cb_ringbuffer_overwrite(cb_ringbuffer_t *rb, const void *data, unsi
         }
         else
         {
-            length = cb_ringbuffer_write(rb, (char *)data + (length - rb->size), rb->size);
+            length = cb_ringbuffer_write(rb, (const char *)data + (length - rb->size), rb->size);
         }
     }
     return length;
@@ -78,40 +88,40 @@ unsigned int cb_ringbuffer_discard(cb_ringbuffer_t *rb, unsigned int length)
     return datalen;
 }
 
-unsigned int cb_ringbuffer_peek(cb_ringbuffer_t* rb, void* data, unsigned int length)
+unsigned int cb_ringbuffer_peek(const cb_ringbuffer_t* rb, void* data, unsigned int length)
 {
     unsigned int datalen = cb_ringbuffer_min(cb_ringbuffer_used(rb), length);
     unsigned int right_len = cb_ringbuffer_min(datalen, rb->size - rb->in_idx);
 
     // Backup actual read length
     length = datalen;
-    cb_memcpy(data, (char *)rb->buff + rb->in_idx, right_len);
+    cb_memcpy(data, (const char *)rb->buff + rb->in_idx, right_len);
     datalen -= right_len;
     cb_memcpy((char *)data + right_len, rb->buff, datalen);
     return length;
 }
 
-unsigned int cb_ringbuffer_used(cb_ringbuffer_t* rb)
+unsigned int cb_ringbuffer_used(const cb_ringbuffer_t* rb)
 {
     return rb->out - rb->in;
 }
 
-unsigned int cb_ringbuffer_isempty(cb_ringbuffer_t* rb)
+unsigned int cb_ringbuffer_isempty(const cb_ringbuffer_t* rb)
 {
     return rb->out == rb->in;
 }
 
-unsigned int cb_ringbuffer_isfull(cb_ringbuffer_t *rb)
+unsigned int cb_ringbuffer_isfull(const cb_ringbuffer_t *rb)
 {
     return rb->size == cb_ringbuffer_used(rb);
 }
 
-unsigned int cb_ringbuffer_free(cb_ringbuffer_t *rb)
+unsigned int cb_ringbuffer_free(const cb_ringbuffer_t *rb)
 {
     return rb->size - cb_ringbuffer_used(rb);
 }
 
-unsigned int cb_ringbuffer_total(cb_ringbuffer_t *rb)
+unsigned int cb_ringbuffer_total(const cb_ringbuffer_t *rb)
 {
     return rb->size;
 }

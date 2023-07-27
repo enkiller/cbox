@@ -6,8 +6,8 @@
  * 2022-03-16     tyx          first implementation
  */
 
-#ifndef __CB_DEF_H__
-#define __CB_DEF_H__
+#ifndef CB_DEF_H_
+#define CB_DEF_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -17,13 +17,7 @@ extern "C" {
 #define CB_MAINVERSION                  1L              /**< major version number */
 #define CB_SUBVERSION                   0L              /**< minor version number */
 #define CB_REVISION                     0L              /**< revise version number */
-
-#define __CB_STR_(s)            #s
-#define CB_STR(s)     __CB_STR_(s)
-
-#define CB_VERSION      CB_STR(CB_MAINVERSION) "." \
-                        CB_STR(CB_SUBVERSION) "." \
-                        CB_STR(CB_REVISION)
+#define CB_VERSION                      "1.1.0"
 
 // basic
 typedef signed char                 cb_int8_t;
@@ -32,12 +26,11 @@ typedef signed short                cb_int16_t;
 typedef unsigned short              cb_uint16_t;
 typedef signed int                  cb_int32_t;
 typedef unsigned int                cb_uint32_t;
-typedef int                         cb_bool_t;
 typedef unsigned long               cb_size_t;
 
 // bool values
-#define cb_true                     ((cb_bool_t)1)
-#define cb_false                    ((cb_bool_t)0)
+#define cb_true                     (1)
+#define cb_false                    (0)
 
 // null
 #define cb_null                  (0)
@@ -62,7 +55,7 @@ typedef unsigned long               cb_size_t;
 #endif
 
 // define
-#define CB_ARRAY_SIZE(_array)   (sizeof(_array) / sizeof(_array[0]))
+#define CB_ARRAY_SIZE(_array)   (sizeof(_array) / sizeof((_array)[0]))
 
 #ifdef __cplusplus
 }

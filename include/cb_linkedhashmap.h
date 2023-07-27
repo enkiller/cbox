@@ -8,8 +8,8 @@
 
 #include "cb_hashmap.h"
 
-#ifndef __CB_LINKEDHASHMAP_H__
-#define __CB_LINEKDHASHMAP_H__
+#ifndef CB_LINKEDHASHMAP_H_
+#define CB_LINEKDHASHMAP_H_
 
 #ifdef __cplusplus
 extern "C" {

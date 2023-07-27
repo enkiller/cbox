@@ -6,8 +6,8 @@
  * 2022-03-16     tyx          first implementation
  */
 
-#ifndef __CB_HASHMAP_H__
-#define __CB_HASHMAP_H__
+#ifndef CB_HASHMAP_H_
+#define CB_HASHMAP_H_
 
 #include "cb_list.h"
 
@@ -27,7 +27,7 @@ typedef struct cb_hashmap_item cb_hashmap_item_t;
 struct cb_hashmap_ops
 {
     cb_uint32_t (*hash)(const void *k);
-    cb_bool_t (*cmp)(const void *k1, const void *k2);
+    long (*cmp)(const void *k1, const void *k2);
 };
 
 struct cb_hashmap_table

@@ -6,8 +6,8 @@
  * 2023-06-03     tyx          first implementation
  */
 
-#ifndef __CB_HSM_H__
-#define __CB_HSM_H__
+#ifndef CB_HSM_H_
+#define CB_HSM_H_
 
 #include "cb_def.h"
 

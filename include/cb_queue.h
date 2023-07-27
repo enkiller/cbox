@@ -8,8 +8,8 @@
 
 #include "cb_list.h"
 
-#ifndef __CB_QUEUE_H__
-#define __CB_QUEUE_H__
+#ifndef CB_QUEUE_H_
+#define CB_QUEUE_H_
 
 #ifdef __cplusplus
 extern "C" {

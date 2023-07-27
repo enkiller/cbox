@@ -8,8 +8,8 @@
 
 #include "cb_def.h"
 
-#ifndef __CB_RINGBUFFER_H__
-#define __CB_RINGBUFFER_H__
+#ifndef CB_RINGBUFFER_H_
+#define CB_RINGBUFFER_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -30,12 +30,12 @@ unsigned int cb_ringbuffer_write(cb_ringbuffer_t *rb, const void *data, unsigned
 unsigned int cb_ringbuffer_overwrite(cb_ringbuffer_t *rb, const void *data, unsigned int length);
 unsigned int cb_ringbuffer_read(cb_ringbuffer_t *rb, void *data, unsigned int length);
 unsigned int cb_ringbuffer_discard(cb_ringbuffer_t *rb, unsigned int length);
-unsigned int cb_ringbuffer_peek(cb_ringbuffer_t *rb, void *data, unsigned int length);
-unsigned int cb_ringbuffer_isempty(cb_ringbuffer_t *rb);
-unsigned int cb_ringbuffer_isfull(cb_ringbuffer_t *rb);
-unsigned int cb_ringbuffer_free(cb_ringbuffer_t *rb);
-unsigned int cb_ringbuffer_used(cb_ringbuffer_t *rb);
-unsigned int cb_ringbuffer_total(cb_ringbuffer_t *rb);
+unsigned int cb_ringbuffer_peek(const cb_ringbuffer_t *rb, void *data, unsigned int length);
+unsigned int cb_ringbuffer_isempty(const cb_ringbuffer_t *rb);
+unsigned int cb_ringbuffer_isfull(const cb_ringbuffer_t *rb);
+unsigned int cb_ringbuffer_free(const cb_ringbuffer_t *rb);
+unsigned int cb_ringbuffer_used(const cb_ringbuffer_t *rb);
+unsigned int cb_ringbuffer_total(const cb_ringbuffer_t *rb);
 
 #ifdef __cplusplus
 }

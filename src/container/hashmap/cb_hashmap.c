@@ -15,7 +15,7 @@ cb_inline cb_hhead_t *_tab_head_get(cb_hashmap_t *object, const void *key)
 }
 
 cb_hashmap_item_t *cb_hashmap_pick(cb_hashmap_t *object,
-    const void *key, cb_bool_t removed, cb_hhead_t **hh_ptr)
+    const void *key, int removed, cb_hhead_t **hh_ptr)
 {
     cb_hhead_t *hh;
     cb_hashmap_item_t *item = cb_null;
@@ -31,7 +31,7 @@ cb_hashmap_item_t *cb_hashmap_pick(cb_hashmap_t *object,
     {
         cb_hashmap_item_t *tmp = cb_hlist_entry(i, cb_hashmap_item_t, n);
         /* Whether the key values are equal */
-        if (object->ops->cmp(key, tmp->key))
+        if (object->ops->cmp(key, tmp->key) == 0)
         {
             if (removed)
             {
