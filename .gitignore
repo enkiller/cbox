@@ -23,3 +23,4 @@
 *.gcno
 cbox-test
 build
+*cppcheck*
