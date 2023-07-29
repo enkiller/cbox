@@ -263,7 +263,7 @@ static void result_clean(void)
 static const char *dispatch(enum QHsmTstSignals sig) {
     cb_hsm_event_t e;
     result_clean();
-    e.topic = sig;
+    e.topic = sig & 0xFFFF;
     test_actor.ptr += snprintf(test_actor.ptr, test_actor.end - test_actor.ptr, "%c:", 'A' + sig - A_SIG);
     cb_hsm_event_handle(&test_actor.super, &e);                       /* dispatch the event */
     return test_actor.buff;

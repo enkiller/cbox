@@ -26,7 +26,6 @@ cb_hsm_ret_t cb_hsm_state_top(cb_hsm_actor_t* me, const cb_hsm_event_t* const e)
 cb_hsm_state_t cb_hsm_bifurcation_node(cb_hsm_state_t *p1, int d1, cb_hsm_state_t *p2, int d2)
 {
     cb_hsm_state_t res = cb_null;
-    int i = 0;
 
     /*
      * Match the height of the trees on both sides
@@ -53,7 +52,7 @@ cb_hsm_state_t cb_hsm_bifurcation_node(cb_hsm_state_t *p1, int d1, cb_hsm_state_
         /*
          * Loop to find the parent node
          */
-        for (i = 0; i < d1; i++)
+        for (int i = 0; i < d1; i++)
         {
             if (p1[i] == p2[i])
             {
@@ -138,9 +137,8 @@ static cb_hsm_state_t cb_hsm_detect_ancestor(cb_hsm_actor_t *me, cb_hsm_state_t 
 void cb_hsm_enter(cb_hsm_actor_t *me, cb_hsm_state_t substate)
 {
     cb_hsm_state_t path[CB_HSM_STATE_LEVEL_MAX];
-    cb_hsm_state_t top = me->state;
+    cb_hsm_state_t top;
     cb_hsm_ret_t ret;
-    int depth;
 
     do {
         /*
@@ -148,7 +146,7 @@ void cb_hsm_enter(cb_hsm_actor_t *me, cb_hsm_state_t substate)
          * path stores the path from the current state to the goal child state
          * Mapping relation: path[0]:path[depth] --> substate:top
         */
-        depth = cb_hsm_detect_path(me, substate, path, CB_HSM_STATE_LEVEL_MAX);
+        int depth = cb_hsm_detect_path(me, substate, path, CB_HSM_STATE_LEVEL_MAX);
         // Enter the status of each layer in sequence
         while (--depth >= 0)
         {
