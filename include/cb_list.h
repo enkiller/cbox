@@ -103,7 +103,7 @@ cb_inline unsigned int cb_list_len(const cb_list_t *l)
  * @head:   the head for your list.
  */
 #define cb_list_for_each(pos, head) \
-    for (cb_list_t *(pos) = (head)->next, *nn = (pos)->next; (pos) != (head); (pos) = nn, nn = (pos)->next)
+    for (cb_list_t *pos = (head)->next, *nn = (pos)->next; (pos) != (head); (pos) = nn, nn = (pos)->next)
 
 /**
  * cb_list_first_entry - get the first element from a list
@@ -313,7 +313,7 @@ cb_inline cb_hlist_t *cb_hlist_tail(const struct cb_hlist_head *h)
  * @head:   the head for your cb_hlist_head.
  */
 #define cb_hlist_for_each(pos, head) \
-    for (cb_hlist_t *(pos) = (head)->first, *nn = (pos) ? (pos)->next : cb_null; (pos) != cb_null; \
+    for (cb_hlist_t *pos = (head)->first, *nn = (pos) ? (pos)->next : cb_null; (pos) != cb_null; \
         (pos) = nn, nn = (pos) ? (pos)->next : cb_null)
 
 /**
