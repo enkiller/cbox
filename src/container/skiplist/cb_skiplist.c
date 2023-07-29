@@ -94,7 +94,7 @@ cb_skiplist_node_t *cb_skiplist_iter_next(cb_skiplist_iter *iter)
 
     while (node == cb_null && lvl >= 0)
     {
-        cb_list_t* last = iter->skiplist->head.row[lvl].prev;
+        const cb_list_t* last = iter->skiplist->head.row[lvl].prev;
         cb_list_t ** list = iter->list;
         list[lvl] = iter->next;
         if (list[lvl] != last)

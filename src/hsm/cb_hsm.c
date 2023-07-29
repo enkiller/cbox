@@ -246,7 +246,7 @@ cb_hsm_ret_t cb_hsm_handle(cb_hsm_actor_t* me)
 void cb_hsm_event_handle(cb_hsm_actor_t *me, const cb_hsm_event_t * const e)
 {
     cb_hsm_ret_t ret = CB_HSM_RET_SUPER;
-    cb_hsm_state_t target, current, original = me->state;
+    cb_hsm_state_t current, original = me->state;
 
     /*
      * Passes the event to the state machine for
@@ -262,7 +262,7 @@ void cb_hsm_event_handle(cb_hsm_actor_t *me, const cb_hsm_event_t * const e)
      */
     if (ret == CB_HSM_RET_TRAN)
     {
-        target = me->state;
+        cb_hsm_state_t target = me->state;
         me->state = original;
         cb_hsm_exit(me, current);
         cb_hsm_transition(me, target);

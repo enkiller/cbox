@@ -35,7 +35,8 @@ typedef struct cb_list_node cb_list_t;                  /**< Type for lists. */
  */
 cb_inline void cb_list_init(cb_list_t *l)
 {
-    l->next = l->prev = l;
+    l->prev = l;
+    l->next = l;
 }
 
 cb_inline void cb_list_insert_after(cb_list_t *l, cb_list_t *n)
@@ -60,11 +61,11 @@ cb_inline void cb_list_remove(cb_list_t *n)
 {
     n->next->prev = n->prev;
     n->prev->next = n->next;
-
-    n->next = n->prev = n;
+    n->prev = n;
+    n->next = n;
 }
 
-cb_inline cb_list_t *cb_list_first(cb_list_t *l)
+cb_inline cb_list_t *cb_list_first(const cb_list_t *l)
 {
     return l->next;
 }
@@ -102,7 +103,7 @@ cb_inline unsigned int cb_list_len(const cb_list_t *l)
  * @head:   the head for your list.
  */
 #define cb_list_for_each(pos, head) \
-    for (cb_list_t *pos = (head)->next, *nn = pos->next; pos != (head); pos = nn, nn = pos->next)
+    for (cb_list_t *(pos) = (head)->next, *nn = (pos)->next; (pos) != (head); (pos) = nn, nn = (pos)->next)
 
 /**
  * cb_list_first_entry - get the first element from a list
@@ -171,9 +172,11 @@ cb_inline void cb_hlist_insert_after(cb_hlist_t *l, cb_hlist_t *n)
 {
     n->next = l->next;
     l->next = n;
-
     n->pprev = &l->next;
-    if (n->next) n->next->pprev = &n->next;
+    if (n->next != cb_null)
+    {
+        n->next->pprev = &n->next;
+    }
 }
 
 /**
@@ -200,8 +203,10 @@ cb_inline void cb_hlist_insert_before(cb_hlist_t *l, cb_hlist_t *n)
 cb_inline void cb_hlist_insert_head(struct cb_hlist_head *h, cb_hlist_t *n)
 {
     n->next = h->first;
-    if (h->first) h->first->pprev = &n->next;
-
+    if (h->first != cb_null)
+    {
+        h->first->pprev = &n->next;
+    }
     h->first = n;
     n->pprev = &h->first;
 }
@@ -212,10 +217,13 @@ cb_inline void cb_hlist_insert_head(struct cb_hlist_head *h, cb_hlist_t *n)
  */
 cb_inline void cb_hlist_remove(cb_hlist_t *n)
 {
-    if (n->pprev)
+    if (n->pprev != cb_null)
     {
         *(n->pprev) = n->next;
-        if (n->next) n->next->pprev = n->pprev;
+        if (n->next != cb_null)
+        {
+            n->next->pprev = n->pprev;
+        }
     }
     n->next = cb_null;
     n->pprev = cb_null;
@@ -231,7 +239,10 @@ cb_inline void cb_hlist_move(struct cb_hlist_head *des,
     struct cb_hlist_head *src)
 {
     des->first = src->first;
-    if (des->first) des->first->pprev = &des->first;
+    if (des->first != cb_null)
+    {
+        des->first->pprev = &des->first;
+    }
     src->first = cb_null;
 }
 
@@ -239,7 +250,7 @@ cb_inline void cb_hlist_move(struct cb_hlist_head *des,
  * @brief tests whether a hash list is empty
  * @param h the list head to test.
  */
-cb_inline int cb_hlist_isempty(struct cb_hlist_head *h)
+cb_inline int cb_hlist_isempty(const struct cb_hlist_head *h)
 {
     return h->first == cb_null;
 }
@@ -248,7 +259,7 @@ cb_inline int cb_hlist_isempty(struct cb_hlist_head *h)
  * @brief tests Whether the node is in the hash list
  * @param l the list to test.
  */
-cb_inline int cb_hlist_unhashed(cb_hlist_t *l)
+cb_inline int cb_hlist_unhashed(const cb_hlist_t *l)
 {
     return l->pprev == cb_null;
 }
@@ -261,7 +272,7 @@ cb_inline unsigned int cb_hlist_len(const struct cb_hlist_head *h)
 {
     unsigned int len = 0;
     cb_hlist_t *l = h->first;
-    while (l)
+    while (l != cb_null)
     {
         len ++;
         l = l->next;
@@ -277,7 +288,13 @@ cb_inline cb_hlist_t *cb_hlist_first(const struct cb_hlist_head *h)
 cb_inline cb_hlist_t *cb_hlist_tail(const struct cb_hlist_head *h)
 {
     cb_hlist_t *l = h->first;
-    if (l) while (l->next) l = l->next;
+    if (l != cb_null)
+    {
+        while (l->next != cb_null)
+        {
+            l = l->next;
+        }
+    }
     return l;
 }
 
@@ -296,8 +313,8 @@ cb_inline cb_hlist_t *cb_hlist_tail(const struct cb_hlist_head *h)
  * @head:   the head for your cb_hlist_head.
  */
 #define cb_hlist_for_each(pos, head) \
-    for (cb_hlist_t *pos = (head)->first, *nn = pos ? pos->next : cb_null; pos != cb_null; \
-        pos = nn, nn = pos ? pos->next : cb_null)
+    for (cb_hlist_t *(pos) = (head)->first, *nn = (pos) ? (pos)->next : cb_null; (pos) != cb_null; \
+        (pos) = nn, nn = (pos) ? (pos)->next : cb_null)
 
 /**
  * cb_hlist_first_entry - get the first element from a hash slist
