@@ -27,10 +27,10 @@ TEST(testCase, cb_hashfun_test02)
     char s1[] = "EQ";
     const char *s2 = "EQ";
 
-    EXPECT_NE(cb_hash_string_cmp("", ""), 0);
-    EXPECT_EQ(cb_hash_string_cmp("", s1), 0);
-    EXPECT_NE(cb_hash_string_cmp(s1, s1), 0);
-    EXPECT_NE(cb_hash_string_cmp(s1, s2), 0);
+    EXPECT_EQ(cb_hash_string_cmp("", ""), 0);
+    EXPECT_NE(cb_hash_string_cmp("", s1), 0);
+    EXPECT_EQ(cb_hash_string_cmp(s1, s1), 0);
+    EXPECT_EQ(cb_hash_string_cmp(s1, s2), 0);
 }
 
 TEST(testCase, cb_hashfun_test03)
@@ -51,7 +51,7 @@ TEST(testCase, cb_hashfun_test04)
 {
     cb_uint32_t n0 = 0, n1 = 1, n00 = 0;
 
-    EXPECT_NE(cb_hash_uint32_cmp(&n0, &n0), 0);
-    EXPECT_EQ(cb_hash_string_cmp(&n0, &n1), 0);
-    EXPECT_NE(cb_hash_uint32_cmp(&n0, &n00), 0);
+    EXPECT_EQ(cb_hash_uint32_cmp(&n0, &n0), 0);
+    EXPECT_NE(cb_hash_string_cmp(&n0, &n1), 0);
+    EXPECT_EQ(cb_hash_uint32_cmp(&n0, &n00), 0);
 }
