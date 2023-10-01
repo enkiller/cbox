@@ -34,3 +34,41 @@ TEST(testCase, cb_memcpy_test01)
         EXPECT_EQ(memcmp(buf_cmp, buf_des, sizeof(buf_cmp)), 0);
     }
 }
+
+TEST(testCase, cb_memcpy_test02)
+{
+#define CB_MEMCPY_TEST_SIZE_ 64
+    char buf_src[CB_MEMCPY_TEST_SIZE_];
+    char buf_des[CB_MEMCPY_TEST_SIZE_];
+    char buf_cmp[CB_MEMCPY_TEST_SIZE_];
+
+    for (unsigned i = 0; i < CB_MEMCPY_TEST_SIZE_; i++)
+    {
+        memset(buf_src, '#', CB_MEMCPY_TEST_SIZE_);
+        memset(buf_des, 0, CB_MEMCPY_TEST_SIZE_);
+        memset(buf_cmp, 0, CB_MEMCPY_TEST_SIZE_);
+        cb_memcpy(buf_des, buf_src + i, CB_MEMCPY_TEST_SIZE_ - i);
+        memcpy(buf_cmp, buf_src + i, CB_MEMCPY_TEST_SIZE_ - i);
+        EXPECT_EQ(memcmp(buf_cmp, buf_des, sizeof(buf_cmp)), 0);
+    }
+
+    for (unsigned i = 0; i < CB_MEMCPY_TEST_SIZE_; i++)
+    {
+        memset(buf_src, '#', CB_MEMCPY_TEST_SIZE_);
+        memset(buf_des, 0, CB_MEMCPY_TEST_SIZE_);
+        memset(buf_cmp, 0, CB_MEMCPY_TEST_SIZE_);
+        cb_memcpy(buf_des + i, buf_src, CB_MEMCPY_TEST_SIZE_ - i);
+        memcpy(buf_cmp + i, buf_src, CB_MEMCPY_TEST_SIZE_ - i);
+        EXPECT_EQ(memcmp(buf_cmp, buf_des, sizeof(buf_cmp)), 0);
+    }
+
+    for (unsigned i = 0; i < CB_MEMCPY_TEST_SIZE_; i++)
+    {
+        memset(buf_src, '#', CB_MEMCPY_TEST_SIZE_);
+        memset(buf_des, 0, CB_MEMCPY_TEST_SIZE_);
+        memset(buf_cmp, 0, CB_MEMCPY_TEST_SIZE_);
+        cb_memcpy(buf_des + i, buf_src + i, CB_MEMCPY_TEST_SIZE_ - i);
+        memcpy(buf_cmp + i, buf_src + i, CB_MEMCPY_TEST_SIZE_ - i);
+        EXPECT_EQ(memcmp(buf_cmp, buf_des, sizeof(buf_cmp)), 0);
+    }
+}
