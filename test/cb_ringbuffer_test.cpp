@@ -122,3 +122,50 @@ TEST(testCase, cb_ringbuffer_test04)
         }
     }
 }
+
+TEST(testCase, cb_ringbuffer_test05)
+{
+    cb_ringbuffer_t ringbuff;
+    cb_ringbuffer_t* rb;
+    char buff[8];
+    char read_buf[sizeof(buff) * 2];
+    char src_buf[sizeof(buff) * 2];
+    unsigned int buff_size;
+
+    for (unsigned int i = 0; i < sizeof(src_buf); i++)
+    {
+        src_buf[i] = (char)(i & 0xff);
+    }
+
+    rb = cb_ringbuffer_init(&ringbuff, buff, sizeof(buff));
+    for (unsigned int i = 0; i < sizeof(buff) * 2; i++)
+    {
+        for (unsigned int j = 0; j < i; j++)
+        {
+            cb_ringbuffer_overwrite(rb, &src_buf[j], 1);
+        }
+        if (i < sizeof(buff))
+        {
+            buff_size = i;
+        }
+        else
+        {
+            buff_size = sizeof(buff);
+        }
+        EXPECT_EQ(cb_ringbuffer_read(rb, read_buf, i), buff_size);
+        if (i < sizeof(buff))
+        {
+            for (unsigned j = 0; j < buff_size; j++)
+            {
+                EXPECT_EQ(read_buf[j], src_buf[j]);
+            }
+        }
+        else
+        {
+            for (unsigned j = 0; j < buff_size; j++)
+            {
+                EXPECT_EQ(read_buf[j], src_buf[j + i - sizeof(buff)]);
+            }
+        }
+    }
+}
