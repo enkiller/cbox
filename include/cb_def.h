@@ -55,7 +55,9 @@ typedef unsigned long               cb_size_t;
 #endif
 
 // define
-#define CB_ARRAY_SIZE(_array)   (sizeof(_array) / sizeof((_array)[0]))
+#define CB_ARRAY_SIZE(_array)       (sizeof(_array) / sizeof((_array)[0]))
+#define CB_ALIGN(size, align)       (((size) + (align) - 1) & ~((align) - 1))
+#define CB_ALIGN_DOWN(size, align)  ((size) & ~((align) - 1))
 
 #ifdef __cplusplus
 }
