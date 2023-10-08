@@ -26,6 +26,7 @@ typedef signed short                cb_int16_t;
 typedef unsigned short              cb_uint16_t;
 typedef signed int                  cb_int32_t;
 typedef unsigned int                cb_uint32_t;
+typedef unsigned long long          cb_uint64_t;
 typedef unsigned long               cb_size_t;
 
 // bool values
@@ -58,6 +59,8 @@ typedef unsigned long               cb_size_t;
 #define CB_ARRAY_SIZE(_array)       (sizeof(_array) / sizeof((_array)[0]))
 #define CB_ALIGN(size, align)       (((size) + (align) - 1) & ~((align) - 1))
 #define CB_ALIGN_DOWN(size, align)  ((size) & ~((align) - 1))
+
+#define CB_BITS_LONG    (sizeof(unsigned long) * 8UL)
 
 #ifdef __cplusplus
 }
