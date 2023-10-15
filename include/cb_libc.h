@@ -15,7 +15,8 @@ extern "C" {
 
 /* string */
 long cb_strcmp(const char* s1, const char* s2);
-void* cb_memcpy(void* dst, const void* src, unsigned int count);
+void* cb_memcpy(void* dst, const void* src, unsigned long count);
+void* cb_memset(void* dst, int c, unsigned long count);
 
 /* stdlib */
 void cb_srandom(unsigned int seed);

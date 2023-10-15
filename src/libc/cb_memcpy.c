@@ -8,7 +8,7 @@
 
 #include "cb_libc.h"
 
-void* cb_memcpy(void* dst, const void* src, unsigned int count)
+void* cb_memcpy(void* dst, const void* src, unsigned long count)
 {
     char* dst_ptr = (char *)dst;
     char* src_ptr = (char *)src;
