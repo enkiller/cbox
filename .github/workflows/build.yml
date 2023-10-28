@@ -22,7 +22,7 @@ jobs:
         run: |
           gcc --version
           cd build
-          cmake -DASAN=ON -DCOVERAGE=ON -DSTRICT_ERROR=ON ..
+          cmake -DASAN=ON -DSTRICT_ERROR=ON ..
           make
       - name: Run Testcase
         run: ./build/bin/Cbox-test
