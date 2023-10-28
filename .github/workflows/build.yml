@@ -1,0 +1,69 @@
+name: Build
+
+on: push
+
+jobs:
+  ubuntu-build:
+    if: startsWith(github.event.head_commit.message, '[SKIP]') == false
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install gtest
+        run: |
+          mkdir build && cd build
+          git clone -b release-1.11.0 --depth=1 https://github.com/google/googletest.git googletest
+          cd googletest && mkdir gtest_build && cd gtest_build
+          sudo cmake .. && sudo make
+          sudo make install
+      - name: Compile
+        if: ${{ success() }}
+        shell: bash
+        run: |
+          gcc --version
+          cd build
+          cmake -DASAN=ON -DCOVERAGE=ON -DSTRICT_ERROR=ON ..
+          make
+      - name: Run Testcase
+        run: ./build/bin/Cbox-test
+
+  windows-build:
+    if: startsWith(github.event.head_commit.message, '[SKIP]') == false
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Compile
+        if: ${{ success() }}
+        shell: bash
+        run: |
+          mkdir build
+          cd build
+          cmake -DSTRICT_ERROR=ON ..
+          cmake --build . --config release
+      - name: Run Testcase
+        run: ./build/bin/Release/Cbox-test.exe
+
+  macos-build:
+    if: startsWith(github.event.head_commit.message, '[SKIP]') == false
+    runs-on: macos-11
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install gtest
+        run: |
+          mkdir build && cd build
+          git clone -b release-1.11.0 --depth=1 https://github.com/google/googletest.git googletest
+          cd googletest && mkdir gtest_build && cd gtest_build
+          cmake .. && sudo make
+          make install
+      - name: Compile
+        if: ${{ success() }}
+        shell: bash
+        run: |
+          gcc --version
+          cd build
+          cmake -DASAN=ON -DSTRICT_ERROR=ON ..
+          make
+      - name: Run Testcase
+        run: ./build/bin/Cbox-test
