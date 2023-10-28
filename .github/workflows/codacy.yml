@@ -19,8 +19,6 @@ on:
   pull_request:
     # The branches below must be a subset of the branches above
     branches: [ "master" ]
-  schedule:
-    - cron: '36 4 * * 5'
 
 permissions:
   contents: read
@@ -59,3 +57,38 @@ jobs:
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: results.sarif
+
+  codacy-coverage-reporter:
+    runs-on: ubuntu-latest
+    name: codacy-coverage-reporter
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install gtest
+        run: |
+          mkdir build && cd build
+          git clone -b release-1.11.0 --depth=1 https://github.com/google/googletest.git googletest
+          cd googletest && mkdir gtest_build && cd gtest_build
+          sudo cmake .. && sudo make
+          sudo make install
+      - name: Install LCOV
+        run: |
+          sudo apt-get install lcov
+      - name: Compile
+        if: ${{ success() }}
+        shell: bash
+        run: |
+          gcc --version
+          cd build
+          cmake -DASAN=ON -DCOVERAGE=ON -DSTRICT_ERROR=ON ..
+          make
+      - name: Run Testcase
+        run: |
+          build/bin/Cbox-test
+          lcov --directory build --capture --output-file build/test.info
+      - name: Run codacy-coverage-reporter
+        uses: codacy/codacy-coverage-reporter-action@v1
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          coverage-reports: 'build/test.info'
+          # or a comma-separated list for multiple reports
+          # coverage-reports: <PATH_TO_REPORT>, <PATH_TO_REPORT>
