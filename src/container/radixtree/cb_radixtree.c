@@ -31,10 +31,9 @@ static void cb_radix_tree_free_node(cb_rtroot_t* root, cb_rtslots_t *slot)
     root->free_node(root, slot, root->slot_cnt);
 }
 
-static const unsigned char* cb_radix_tree_maxkey_get(unsigned char height, unsigned char slots)
+static unsigned long long cb_radix_tree_maxkey_get(unsigned char height, unsigned char slots)
 {
-    const unsigned char* zero = cb_null;
-    const unsigned char* key = cb_null;
+    unsigned long long key = 0;
     unsigned char mask = 0xFFU;
     unsigned char maskbits;
 
@@ -42,10 +41,10 @@ static const unsigned char* cb_radix_tree_maxkey_get(unsigned char height, unsig
     maskbits = cb_ctz(slots) & 0xFFU;
     // Calculate level mask
     mask = ~(mask << maskbits);
-    key = zero + mask;
+    key = mask;
     while (height--)
     {
-        key = zero + ((key - zero) << maskbits) + mask;
+        key = (key << maskbits) + mask;
     }
     return key;
 }
@@ -75,6 +74,14 @@ static void cb_radix_tree_delete(cb_rtroot_t* root, cb_rtslots_t* slots, unsigne
     }
 }
 
+static int cb_radix_tree_lessthen(unsigned long long max_key, const void *key)
+{
+    const unsigned char *ptr = key;
+    const unsigned char *zero = cb_null;
+    unsigned long long uintkey = ptr - zero;
+    return max_key < uintkey;
+}
+
 cb_rtroot_t *cb_radix_tree_init(cb_rtroot_t *root, unsigned char slots)
 {
     root->slot_cnt = (0x1U << (cb_fls(slots) - 1)) & 0xFFU;
@@ -99,9 +106,8 @@ static int cb_radix_tree_height_expand(cb_rtroot_t* root, const void* key)
     unsigned char new_height, increment, i;
     cb_rtslots_t* slots = cb_null;
     cb_rtslots_t* head = cb_null;
-    const unsigned char *ptr = key;
 
-    if (root->max_key < ptr)
+    if (cb_radix_tree_lessthen(root->max_key, key))
     {
         new_height = cb_radix_tree_max_height(key, root->mask_bits);
         if (new_height > root->height)
@@ -143,19 +149,19 @@ static cb_rtslots_t* cb_radix_tree_slots_expand(cb_rtroot_t* root, const void* k
     unsigned char alloc_flag = 0;
     const unsigned char *ptr = key;
     const unsigned char *zero = cb_null;
-    unsigned long long ikey = ptr - zero;
+    unsigned long long uintkey = ptr - zero;
 
-    if (root->max_key < ptr)
+    if (cb_radix_tree_lessthen(root->max_key, key))
     {
         cb_radix_tree_height_expand(root, key);
     }
-    if (root->max_key >= ptr)
+    if (!cb_radix_tree_lessthen(root->max_key, key))
     {
         mask = ~(mask << root->mask_bits);
         i = root->height;
         h = 0;
         slots = root->root_slots;
-        s = (ikey >> (i * root->mask_bits)) & mask;
+        s = (uintkey >> (i * root->mask_bits)) & mask;
         while (slots != cb_null && h < root->height)
         {
             if (slots[s].next_level == cb_null)
@@ -165,7 +171,7 @@ static cb_rtslots_t* cb_radix_tree_slots_expand(cb_rtroot_t* root, const void* k
             }
             slots = slots[s].next_level;
             i -= 1;
-            s = (ikey >> (i * root->mask_bits)) & mask;
+            s = (uintkey >> (i * root->mask_bits)) & mask;
             h += 1;
         }
         if (slots != cb_null)
@@ -210,7 +216,7 @@ cb_rtslots_t* cb_radix_tree_slot_get(cb_rtroot_t* root, const void* key)
     const unsigned char *zero = cb_null;
     unsigned long long ikey = ptr - zero;
 
-    if (root->max_key >= ptr)
+    if (!cb_radix_tree_lessthen(root->max_key, key))
     {
         mask = ~(mask << root->mask_bits);
         i = root->height;

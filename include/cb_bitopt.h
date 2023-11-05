@@ -170,7 +170,8 @@ cb_inline int cb_ffz64(cb_uint64_t x)
  */
 cb_inline int cb_ffz(unsigned long x)
 {
-    return cb_ffz64((~0x0ULL << CB_BITS_LONG) | x);
+    cb_uint64_t mask = (~0x0ULL) ^ (~0x0UL);
+    return cb_ffz64(mask | x);
 }
 
 /**
@@ -281,9 +282,12 @@ cb_inline int cb_clz64(cb_uint64_t x)
 cb_inline int cb_clz(unsigned long x)
 {
     cb_uint64_t t = x;
+    cb_uint64_t mask = ~0x0ULL;
 
-    t = t << (64 - CB_BITS_LONG);
-    t |= ~0x0ULL >> (64 - CB_BITS_LONG);
+    mask = mask << (sizeof(cb_uint64_t) * 8U - CB_BITS_LONG);
+    mask = ~mask;
+    t = t << (sizeof(cb_uint64_t) * 8U - CB_BITS_LONG);
+    t |= mask;
     return cb_clz64(t);
 }
 

@@ -271,20 +271,21 @@ TEST(testCase, cb_bitopt_fls32_test01)
 {
     uint32_t v;
     uint32_t one = 0x1U;
-    unsigned long i;
+    uint32_t i;
 
     EXPECT_EQ(cb_fls32(0), 0);
     EXPECT_EQ(cb_fls32(1), 1);
     EXPECT_EQ(cb_fls32(0xF0), 8);
     EXPECT_EQ(cb_fls32(0x80000000), 32);
     EXPECT_EQ(cb_fls32(0x80000001), 32);
+    EXPECT_EQ(cb_fls32(0xFFFFFFFF), 32);
 
-    for (i = 0, v = 0U; i <= 32UL; i++)
+    for (i = 0, v = 0U; i < 32UL; i++)
     {
         EXPECT_EQ(cb_fls32(v), i);
         v = one << i;
     }
-    for (i = 0, v = 0; i <= 32UL; i++)
+    for (i = 0, v = 0; i < 32UL; i++)
     {
         EXPECT_EQ(cb_fls32(v), i);
         v |= one << i;
@@ -302,13 +303,14 @@ TEST(testCase, cb_bitopt_fls64_test01)
     EXPECT_EQ(cb_fls64(0x80000000ULL), 32);
     EXPECT_EQ(cb_fls64(0x8000000000000000ULL), 64);
     EXPECT_EQ(cb_fls64(0x8000000000000001ULL), 64);
+    EXPECT_EQ(cb_fls64(0xFFFFFFFFFFFFFFFFULL), 64);
 
-    for (i = 0, v = 0; i <= 64UL; i++)
+    for (i = 0, v = 0; i < 64UL; i++)
     {
         EXPECT_EQ(cb_fls64(v), i);
         v = 0x1ULL << i;
     }
-    for (i = 0, v = 0; i <= 64UL; i++)
+    for (i = 0, v = 0; i < 64UL; i++)
     {
         EXPECT_EQ(cb_fls64(v), i);
         v |= 0x1ULL << i;
@@ -318,16 +320,14 @@ TEST(testCase, cb_bitopt_fls64_test01)
 TEST(testCase, cb_bitopt_fls_test01)
 {
     unsigned long v;
-    unsigned long one = 1;
-    unsigned long zero = 0;
     unsigned long i;
 
-    for (i = 0, v = 0; i <= sizeof(unsigned long) * 8UL; i++)
+    for (i = 0, v = 0; i < sizeof(unsigned long) * 8UL; i++)
     {
         EXPECT_EQ(cb_fls(v), i);
         v = 0x1UL << i;
     }
-    for (i = 0, v = 0; i <= sizeof(unsigned long) * 8UL; i++)
+    for (i = 0, v = 0; i < sizeof(unsigned long) * 8UL; i++)
     {
         EXPECT_EQ(cb_fls(v), i);
         v |= 0x1UL << i;

@@ -33,7 +33,7 @@ struct cb_radix_tree_root
     unsigned char height;
     unsigned char slot_cnt; // Recommended value 4 or 16
     unsigned char mask_bits;
-    const unsigned char *max_key;
+    unsigned long long max_key;
     void *def_value;                // The default value. Mark unused space
     union cb_radix_tree_node_slot *root_slots;
     cb_rtslots_t *(*alloc_node)(cb_rtroot_t *root, unsigned char slots);

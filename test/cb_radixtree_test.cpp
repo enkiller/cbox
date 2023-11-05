@@ -21,9 +21,7 @@ static void *default_value(void)
 class TestRT: public cb_rtroot_t
 {
 public:
-    TestRT(unsigned long fail_index = UINT32_MAX) {
-        unsigned char *zero = NULL;
-        
+    TestRT(unsigned long fail_index = ~0x0UL) {
         this->fail_index = fail_index;
         this->alloc_cnt = 0;
         this->free_cnt = 0;
@@ -46,7 +44,7 @@ public:
         }
         else
         {
-            test_root->fail_index = UINT32_MAX;
+            test_root->fail_index = ~0x0UL;
         }
         return s;
     }
@@ -54,6 +52,7 @@ public:
     static void free_node_func(cb_rtroot_t* root, cb_rtslots_t *n, unsigned char slots)
     {
         TestRT *test_root = static_cast<TestRT *>(root);
+        (void)slots;
         delete[] n;
         test_root->free_cnt += 1;
     }
@@ -80,11 +79,11 @@ TEST(testCase, cb_radix_tree_init_test01)
 
     ptr = test_root.parent();
     ptr = cb_radix_tree_init(ptr, CB_RADIX_TREE_MAP_SIZE);
-    for (i = 0; i < sizeof(void *) * 8; i++)
+    for (i = 0; i < sizeof(void *) * 8 - 1; i++)
     {
         value = cb_radix_tree_lookup(ptr, key);
         EXPECT_EQ(value, INVALID_VALUE);
-        key = zero + ((key - zero) << 0x1);
+        key = zero + ((key - zero) << 0x1) - 1;
     }
     cb_radix_tree_deinit(ptr);
     EXPECT_EQ(test_root.alloc_cnt, test_root.free_cnt);
@@ -108,7 +107,7 @@ TEST(testCase, cb_radix_tree_test02)
         EXPECT_EQ(res, 0);
         value = cb_radix_tree_lookup(ptr, key);
         EXPECT_EQ(value, key);
-        key = zero + ((key - zero) << 0x1);
+        key = zero + ((key - zero) << 0x1) - 1;
     }
     cb_radix_tree_deinit(ptr);
     EXPECT_EQ(test_root.alloc_cnt, test_root.free_cnt);
@@ -130,13 +129,13 @@ TEST(testCase, cb_radix_tree_test03)
     {
         res = cb_radix_tree_insert(ptr, key, key);
         EXPECT_EQ(res, 0);
-        key = zero + ((key - zero) << 0x1);
+        key = zero + ((key - zero) << 0x1) - 1;
     }
     for (i = 0, key = zero + 1; i < sizeof(void *) * 8; i++)
     {
         value = cb_radix_tree_lookup(ptr, key);
         EXPECT_EQ(value, key);
-        key = zero + ((key - zero) << 0x1);
+        key = zero + ((key - zero) << 0x1) - 1;
     }
     cb_radix_tree_deinit(ptr);
     EXPECT_EQ(test_root.alloc_cnt, test_root.free_cnt);
@@ -157,7 +156,7 @@ TEST(testCase, cb_radix_tree_test04)
     ptr = cb_radix_tree_init(ptr, CB_RADIX_TREE_MAP_SIZE);
     for (i = 0; i < sizeof(void *) * 8 - 1; i++)
     {
-        key = zero + ((key - zero) << 0x1);
+        key = zero + ((key - zero) << 0x1) - 1;
     }
     for (i = 0; i < sizeof(void *) * 8; i++)
     {
@@ -172,7 +171,7 @@ TEST(testCase, cb_radix_tree_test04)
     {
         value = cb_radix_tree_lookup(ptr, key);
         EXPECT_EQ(value, key);
-        key = zero + ((key - zero) << 0x1);
+        key = zero + ((key - zero) << 0x1) - 1;
     }
     cb_radix_tree_deinit(ptr);
     EXPECT_EQ(test_root.alloc_cnt, test_root.free_cnt);
@@ -196,13 +195,13 @@ TEST(testCase, cb_radix_tree_test05)
         {
             res = cb_radix_tree_insert(ptr, key, key);
             EXPECT_EQ(res, 0);
-            key = zero + ((key - zero) << 0x1);
+            key = zero + ((key - zero) << 0x1) - 1;
         }
         for (i = 0, key = zero + 1; i < sizeof(void *) * 8; i++)
         {
             value = cb_radix_tree_lookup(ptr, key);
             EXPECT_EQ(value, key);
-            key = zero + ((key - zero) << 0x1);
+            key = zero + ((key - zero) << 0x1) - 1;
         }
         cb_radix_tree_deinit(ptr);
         EXPECT_EQ(test_root.alloc_cnt, test_root.free_cnt);
